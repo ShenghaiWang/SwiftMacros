@@ -19,21 +19,28 @@ public struct Singleton: MemberMacro {
                                                                  in context: Context) throws -> [DeclSyntax] {
         let initializer = try InitializerDeclSyntax("private init()") {}
 
-        let publicACL: TokenSyntax
-        if let modifiers = declaration.modifiers,
-            modifiers.compactMap(\.name.tokenKind.keyword).contains(.public) {
-            publicACL = "public "
-        } else {
-            publicACL = ""
+        let selfToken: TokenSyntax = "Self()"
+        let initShared = FunctionCallExprSyntax(calledExpression: IdentifierExprSyntax(identifier: selfToken)) {}
+        let sharedInitializer = InitializerClauseSyntax(equal: .equalToken(trailingTrivia: .space),
+                                                        value: initShared)
+
+        let staticToken: TokenSyntax = "static"
+        let staticModifier = DeclModifierSyntax(name: staticToken)
+        var modifiers = ModifierListSyntax([staticModifier])
+
+        let isPublicACL = declaration.modifiers?.compactMap(\.name.tokenKind.keyword).contains(.public) ?? false
+        if isPublicACL {
+            let publicToken: TokenSyntax = "public"
+            let publicModifier = DeclModifierSyntax(name: publicToken)
+            modifiers = modifiers.inserting(publicModifier, at: 0)
         }
-        let sharedVariable: DeclSyntax =
-        """
-        \(publicACL)static let shared = Self()
-        """
+
+        let shared = VariableDeclSyntax(modifiers: modifiers,
+                                        .let, name: "shared",
+                                        initializer: sharedInitializer)
 
         return [DeclSyntax(initializer),
-                sharedVariable
-        ]
+                DeclSyntax(shared)]
     }
 }
 

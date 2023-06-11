@@ -19,7 +19,7 @@ final class TimMacroTests: XCTestCase {
             struct A {
                 private init() {
                 }
-                static let shared = Self ()
+                static let shared = Self()
             }
             """,
             macros: testMacros
@@ -37,7 +37,7 @@ final class TimMacroTests: XCTestCase {
             public struct A {
                 private init() {
                 }
-                public static let shared = Self ()
+                public static let shared = Self()
             }
             """,
             macros: testMacros
