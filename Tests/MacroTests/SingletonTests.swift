@@ -1,13 +1,13 @@
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
-import TimMacroMacros
+import Macros
 
-let testMacros: [String: Macro.Type] = [
-    "singleton": Singleton.self,
-]
+final class SingletonTests: XCTestCase {
+    let testMacros: [String: Macro.Type] = [
+        "singleton": Singleton.self,
+    ]
 
-final class TimMacroTests: XCTestCase {
     func testSingletonMacro() {
         assertMacroExpansion(
             """

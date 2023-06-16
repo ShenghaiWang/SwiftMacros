@@ -12,8 +12,8 @@ let package = Package(
             targets: ["TimMacro"]
         ),
         .executable(
-            name: "TimMacroClient",
-            targets: ["TimMacroClient"]
+            name: "Client",
+            targets: ["Client"]
         ),
     ],
     dependencies: [
@@ -21,20 +21,20 @@ let package = Package(
     ],
     targets: [
         .macro(
-            name: "TimMacroMacros",
+            name: "Macros",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
-        .target(name: "TimMacro", dependencies: ["TimMacroMacros"]),
+        .target(name: "TimMacro", dependencies: ["Macros"]),
 
-        .executableTarget(name: "TimMacroClient", dependencies: ["TimMacro"]),
+        .executableTarget(name: "Client", dependencies: ["TimMacro"]),
 
         .testTarget(
-            name: "TimMacroTests",
+            name: "MacroTests",
             dependencies: [
-                "TimMacroMacros",
+                "Macros",
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
             ]
         ),

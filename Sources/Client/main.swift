@@ -1,6 +1,7 @@
 import TimMacro
+import Foundation
 
-struct TestSingleton {
+struct TestSingleton: Encodable {
     let name = "Tim Wang"
     private init() {
     }
@@ -22,3 +23,10 @@ public struct TestPublicSingletonMacro {
 print(TestSingleton.shared.name)
 print(TestSingletonMacro.shared.name)
 print(TestPublicSingletonMacro.shared.name)
+
+
+struct TestStruct: Codable {
+    var name = "Tim Wang"
+}
+
+let data = try #encode(TestStruct())

@@ -1,16 +1,6 @@
-import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-
-extension TokenKind {
-    var keyword: Keyword? {
-        switch self {
-        case let .keyword(keyword): return keyword
-        default: return nil
-        }
-    }
-}
 
 public struct Singleton: MemberMacro {
     public static func expansion<Declaration: DeclGroupSyntax,
@@ -44,9 +34,11 @@ public struct Singleton: MemberMacro {
     }
 }
 
-@main
-struct TimMacroPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        Singleton.self
-    ]
+extension TokenKind {
+    var keyword: Keyword? {
+        switch self {
+        case let .keyword(keyword): return keyword
+        default: return nil
+        }
+    }
 }
