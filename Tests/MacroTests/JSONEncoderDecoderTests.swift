@@ -5,7 +5,8 @@ import Macros
 
 final class JSONEncoderDecoder: XCTestCase {
     let testMacros: [String: Macro.Type] = [
-        "encode": Encode.self
+        "encode": Encode.self,
+        "decode": Decode.self
     ]
 
     func testEncodeMacro() {
@@ -16,6 +17,19 @@ final class JSONEncoderDecoder: XCTestCase {
             expandedSource:
             """
             let data = JSONEncoder().encode(TestStruct())
+            """,
+            macros: testMacros
+        )
+    }
+
+    func testDecodeMacro() {
+        assertMacroExpansion(
+            """
+            let value = #decode(TestStruct.self, from: data)
+            """,
+            expandedSource:
+            """
+            let value = JSONDecoder().decode(TestStruct.self, from: data)
             """,
             macros: testMacros
         )

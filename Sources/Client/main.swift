@@ -30,3 +30,4 @@ struct TestStruct: Codable {
 }
 
 let data = try #encode(TestStruct())
+let value = try #decode(TestStruct.self, from: data)
