@@ -11,7 +11,13 @@ public struct Singleton: MemberMacro {
             throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to struct or class")
         }
         let identifier = (declaration as? StructDeclSyntax)?.identifier ?? (declaration as? ClassDeclSyntax)?.identifier ?? ""
-        let initializer = try InitializerDeclSyntax("private init()") {}
+        var override = ""
+        if let inheritedTypes = (declaration as? ClassDeclSyntax)?.inheritanceClause?.inheritedTypeCollection,
+           inheritedTypes.contains(where: { inherited in inherited.typeName.trimmedDescription == "NSObject" }) {
+            override = "override "
+        }
+
+        let initializer = try InitializerDeclSyntax("private \(raw: override)init()") {}
 
         let selfToken: TokenSyntax = "\(raw: identifier.text)()"
         let initShared = FunctionCallExprSyntax(calledExpression: IdentifierExprSyntax(identifier: selfToken)) {}

@@ -61,4 +61,22 @@ final class SingletonTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testSingletonNSObjectMacro() {
+        assertMacroExpansion(
+            """
+            @singleton
+            class A: NSObject {}
+            """,
+            expandedSource: """
+
+            class A: NSObject {
+                private override init() {
+                }
+                static let shared = A()
+            }
+            """,
+            macros: testMacros
+        )
+    }
 }

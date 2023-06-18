@@ -20,9 +20,15 @@ public struct TestPublicSingletonMacro {
     let name = "Tim Wang"
 }
 
+@Singleton
+class TestPublicSingletonNSOjbectMacro: NSObject {
+    let name = "Tim Wang"
+}
+
 print(TestSingleton.shared.name)
 print(TestSingletonMacro.shared.name)
 print(TestPublicSingletonMacro.shared.name)
+print(TestPublicSingletonNSOjbectMacro.shared.name)
 
 
 struct TestStruct: Codable {
@@ -32,5 +38,4 @@ struct TestStruct: Codable {
 let data = try #encode(TestStruct())
 let value = try #decode(TestStruct.self, from: data)
 
-@Singleton
-class B {}
+
