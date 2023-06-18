@@ -43,4 +43,22 @@ final class SingletonTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testSingletonErrorMacro() {
+        assertMacroExpansion(
+            """
+            @singleton
+            enum A {}
+            """,
+            expandedSource: """
+
+            enum A {
+            }
+            """,
+            diagnostics: [
+                DiagnosticSpec(message: "Can only be applied to struct or class", line: 1, column: 1)
+            ],
+            macros: testMacros
+        )
+    }
 }

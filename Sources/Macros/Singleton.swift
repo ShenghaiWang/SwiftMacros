@@ -7,6 +7,9 @@ public struct Singleton: MemberMacro {
                                  Context: MacroExpansionContext>(of node: AttributeSyntax,
                                                                  providingMembersOf declaration: Declaration,
                                                                  in context: Context) throws -> [DeclSyntax] {
+        guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl].contains(declaration.kind) else {
+            throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to struct or class")
+        }
         let initializer = try InitializerDeclSyntax("private init()") {}
 
         let selfToken: TokenSyntax = "Self()"
