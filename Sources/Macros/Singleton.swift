@@ -10,9 +10,10 @@ public struct Singleton: MemberMacro {
         guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl].contains(declaration.kind) else {
             throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to struct or class")
         }
+        let identifier = (declaration as? StructDeclSyntax)?.identifier ?? (declaration as? ClassDeclSyntax)?.identifier ?? ""
         let initializer = try InitializerDeclSyntax("private init()") {}
 
-        let selfToken: TokenSyntax = "Self()"
+        let selfToken: TokenSyntax = "\(raw: identifier.text)()"
         let initShared = FunctionCallExprSyntax(calledExpression: IdentifierExprSyntax(identifier: selfToken)) {}
         let sharedInitializer = InitializerClauseSyntax(equal: .equalToken(trailingTrivia: .space),
                                                         value: initShared)
