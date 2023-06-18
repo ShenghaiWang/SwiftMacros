@@ -22,6 +22,22 @@ final class JSONEncoderDecoder: XCTestCase {
         )
     }
 
+    func testEncodeErrorMacro() {
+        assertMacroExpansion(
+            """
+            let data = #encode()
+            """,
+            expandedSource:
+            """
+            let data = #encode()
+            """,
+            diagnostics: [
+                DiagnosticSpec(message: "Must specify the value to encode", line: 1, column: 12)
+            ],
+            macros: testMacros
+        )
+    }
+
     func testDecodeMacro() {
         assertMacroExpansion(
             """
@@ -31,6 +47,22 @@ final class JSONEncoderDecoder: XCTestCase {
             """
             let value = JSONDecoder().decode(TestStruct.self, from: data)
             """,
+            macros: testMacros
+        )
+    }
+
+    func testDecodeErrorMacro() {
+        assertMacroExpansion(
+            """
+            let data = #decode(from: data)
+            """,
+            expandedSource:
+            """
+            let data = #decode(from: data)
+            """,
+            diagnostics: [
+                DiagnosticSpec(message: "Must specify the type and the value to decode", line: 1, column: 12)
+            ],
             macros: testMacros
         )
     }
