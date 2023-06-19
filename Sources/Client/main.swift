@@ -1,4 +1,4 @@
-import TimMacro
+import SwiftMacros
 import Foundation
 
 struct TestSingleton: Encodable {

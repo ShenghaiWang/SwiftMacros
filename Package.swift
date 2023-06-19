@@ -4,12 +4,12 @@ import PackageDescription
 import CompilerPluginSupport
 
 let package = Package(
-    name: "TimMacro",
+    name: "SwiftMacros",
     platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
     products: [
         .library(
-            name: "TimMacro",
-            targets: ["TimMacro"]
+            name: "SwiftMacros",
+            targets: ["SwiftMacros"]
         ),
         .executable(
             name: "Client",
@@ -27,9 +27,9 @@ let package = Package(
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
-        .target(name: "TimMacro", dependencies: ["Macros"]),
+        .target(name: "SwiftMacros", dependencies: ["Macros"]),
 
-        .executableTarget(name: "Client", dependencies: ["TimMacro"]),
+        .executableTarget(name: "Client", dependencies: ["SwiftMacros"]),
 
         .testTarget(
             name: "MacroTests",
