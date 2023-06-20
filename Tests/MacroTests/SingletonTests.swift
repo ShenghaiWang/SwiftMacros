@@ -5,17 +5,18 @@ import Macros
 
 final class SingletonTests: XCTestCase {
     let testMacros: [String: Macro.Type] = [
-        "singleton": Singleton.self,
+        "Singleton": Singleton.self,
     ]
 
     func testSingletonMacro() {
         assertMacroExpansion(
             """
-            @singleton
+            @Singleton
             struct A {}
             """,
-            expandedSource: """
-            
+            expandedSource:
+            """
+
             struct A {
                 private init() {
                 }
@@ -29,10 +30,11 @@ final class SingletonTests: XCTestCase {
     func testPublicSingletonMacro() {
         assertMacroExpansion(
             """
-            @singleton
+            @Singleton
             public struct A {}
             """,
-            expandedSource: """
+            expandedSource:
+            """
 
             public struct A {
                 private init() {
@@ -47,10 +49,11 @@ final class SingletonTests: XCTestCase {
     func testSingletonErrorMacro() {
         assertMacroExpansion(
             """
-            @singleton
+            @Singleton
             enum A {}
             """,
-            expandedSource: """
+            expandedSource:
+            """
 
             enum A {
             }
@@ -65,10 +68,11 @@ final class SingletonTests: XCTestCase {
     func testSingletonNSObjectMacro() {
         assertMacroExpansion(
             """
-            @singleton
+            @Singleton
             class A: NSObject {}
             """,
-            expandedSource: """
+            expandedSource:
+            """
 
             class A: NSObject {
                 private override init() {
