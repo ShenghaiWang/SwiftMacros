@@ -36,8 +36,8 @@ struct TestStruct: Codable {
     var name = "Tim Wang"
 }
 
-let data = try #encode(TestStruct())
-let value = try #decode(TestStruct.self, from: data)
+let data = try #encode(TestStruct(), dateEncodingStrategy: .iso8601, dataEncodingStrategy: .base64)
+let value = try #decode(TestStruct.self, from: data, dateDecodingStrategy: .deferredToDate)
 
 struct MyType {
     @AddPublisher

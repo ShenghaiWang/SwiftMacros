@@ -3,7 +3,7 @@ import SwiftSyntaxMacrosTestSupport
 import XCTest
 import Macros
 
-final class JSONEncoderDecoder: XCTestCase {
+final class JSONEncoderDecoderTests: XCTestCase {
     let testMacros: [String: Macro.Type] = [
         "encode": Encode.self,
         "decode": Decode.self
@@ -12,11 +12,15 @@ final class JSONEncoderDecoder: XCTestCase {
     func testEncodeMacro() {
         assertMacroExpansion(
             """
-            let data = #encode(TestStruct())
+            let data = #encode(TestStruct(), dateEncodingStrategy: .deferredToDate)
             """,
             expandedSource:
             """
-            let data = JSONEncoder().encode(TestStruct())
+            let data = {
+                let encoder = JSONEncoder()
+                encoder.dateEncodingStrategy = .deferredToDate
+                return try encoder.encode(TestStruct())
+            }()
             """,
             macros: testMacros
         )
@@ -41,11 +45,15 @@ final class JSONEncoderDecoder: XCTestCase {
     func testDecodeMacro() {
         assertMacroExpansion(
             """
-            let value = #decode(TestStruct.self, from: data)
+            let value = #decode(TestStruct.self, from: data, dateDecodingStrategy: .iso8601)
             """,
             expandedSource:
             """
-            let value = JSONDecoder().decode(TestStruct.self, from: data)
+            let value = {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                return try decoder.decode(TestStruct.self, from: data)
+            }()
             """,
             macros: testMacros
         )
