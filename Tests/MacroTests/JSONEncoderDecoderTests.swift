@@ -12,13 +12,12 @@ final class JSONEncoderDecoderTests: XCTestCase {
     func testEncodeMacro() {
         assertMacroExpansion(
             """
-            let data = #encode(TestStruct(), dateEncodingStrategy: .deferredToDate)
+            let data = #encode(TestStruct())
             """,
             expandedSource:
             """
             let data = {
                 let encoder = JSONEncoder()
-                encoder.dateEncodingStrategy = .deferredToDate
                 return try encoder.encode(TestStruct())
             }()
             """,
@@ -42,16 +41,35 @@ final class JSONEncoderDecoderTests: XCTestCase {
         )
     }
 
+    func testEncodeWithDefaultValuesMacro() {
+        assertMacroExpansion(
+            """
+            let data = #encode(TestStruct(), outputFormatting: [.prettyPrinted, .sortedKeys], dateEncodingStrategy: .iso8601, dataEncodingStrategy: .base64, userInfo: [TestKey: 0])
+            """,
+            expandedSource:
+            """
+            let data = {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+                encoder.dateEncodingStrategy = .iso8601
+                encoder.dataEncodingStrategy = .base64
+                encoder.userInfo = [TestKey: 0]
+                return try encoder.encode(TestStruct())
+            }()
+            """,
+            macros: testMacros
+        )
+    }
+
     func testDecodeMacro() {
         assertMacroExpansion(
             """
-            let value = #decode(TestStruct.self, from: data, dateDecodingStrategy: .iso8601)
+            let value = #decode(TestStruct.self, from: data)
             """,
             expandedSource:
             """
             let value = {
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
                 return try decoder.decode(TestStruct.self, from: data)
             }()
             """,
@@ -71,6 +89,26 @@ final class JSONEncoderDecoderTests: XCTestCase {
             diagnostics: [
                 DiagnosticSpec(message: "Must specify the type and the value to decode", line: 1, column: 12)
             ],
+            macros: testMacros
+        )
+    }
+
+    func testDecodeWithDefaultValuesMacro() {
+        assertMacroExpansion(
+            """
+            let data = #decode(TestStruct.self, from: data, dateDecodingStrategy: .iso8601, dataDecodingStrategy: .base64, userInfo: [TestKey: 0], allowsJSON5: true, assumesTopLevelDictionary: false)
+            """,
+            expandedSource:
+            """
+            let data = {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                decoder.dataDecodingStrategy = .base64
+                decoder.userInfo = [TestKey: 0]
+                decoder.allowsJSON5 = true
+                return try decoder.decode(TestStruct.self, from: data)
+            }()
+            """,
             macros: testMacros
         )
     }

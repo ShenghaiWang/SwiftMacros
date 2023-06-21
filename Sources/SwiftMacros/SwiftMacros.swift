@@ -13,7 +13,7 @@ public macro encode(_ value: Encodable,
                     dataEncodingStrategy: JSONEncoder.DataEncodingStrategy = .deferredToData,
                     nonConformingFloatEncodingStrategy: JSONEncoder.NonConformingFloatEncodingStrategy = .throw,
                     keyEncodingStrategy: JSONEncoder.KeyEncodingStrategy = .useDefaultKeys,
-                    userInfo: [CodingUserInfoKey : Any] = [:]) -> Data = #externalMacro(module: "Macros", type: "Encode")
+                    userInfo: [CodingUserInfoKey: Any] = [:]) -> Data = #externalMacro(module: "Macros", type: "Encode")
 @freestanding(expression)
 public macro decode<T>(_ type: T.Type,
                        from value: Data,
@@ -21,7 +21,7 @@ public macro decode<T>(_ type: T.Type,
                        dataDecodingStrategy: JSONDecoder.DataDecodingStrategy = .base64,
                        nonConformingFloatDecodingStrategy: JSONDecoder.NonConformingFloatDecodingStrategy = .throw,
                        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
-                       userInfo: [CodingUserInfoKey : Any] = [:],
+                       userInfo: [CodingUserInfoKey: Any] = [:],
                        allowsJSON5: Bool = false,
                        assumesTopLevelDictionary: Bool = false) -> T = #externalMacro(module: "Macros", type: "Decode")
 
