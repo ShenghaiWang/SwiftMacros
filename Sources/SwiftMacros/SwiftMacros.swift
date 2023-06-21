@@ -22,5 +22,11 @@ public macro decode<T>(_ type: T.Type,
                        allowsJSON5: Bool = false,
                        assumesTopLevelDictionary: Bool = false) -> T = #externalMacro(module: "Macros", type: "Decode")
 
+@freestanding(expression)
+public macro postNotification(_ name: NSNotification.Name,
+                              object: Any? = nil,
+                              userInfo: [AnyHashable : Any]? = nil,
+                              notificationCenter: NotificationCenter = .default) = #externalMacro(module: "Macros", type: "PostNotification")
+
 @attached(member, names: named(init), named(shared))
 public macro Singleton() = #externalMacro(module: "Macros", type: "Singleton")

@@ -47,3 +47,9 @@ struct MyType {
 _ = MyType().mySubjectPublisher.sink { _ in
 
 }
+
+struct TestNotification {
+    func post() {
+        #postNotification(.NSCalendarDayChanged, object: NSObject(), userInfo: ["value": 0])
+    }
+}
