@@ -1,5 +1,6 @@
 import SwiftMacros
 import Foundation
+import Combine
 
 struct TestSingleton: Encodable {
     let name = "Tim Wang"
@@ -38,4 +39,11 @@ struct TestStruct: Codable {
 let data = try #encode(TestStruct())
 let value = try #decode(TestStruct.self, from: data)
 
+struct MyType {
+    @AddPublisher
+    private let mySubject = PassthroughSubject<Void, Never>()
+}
 
+_ = MyType().mySubjectPublisher.sink { _ in
+
+}

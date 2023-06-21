@@ -4,8 +4,9 @@ import SwiftSyntaxMacros
 @main
 struct MacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        Singleton.self,
+        AddPublisher.self,
         Encode.self,
-        Decode.self
+        Decode.self,
+        Singleton.self,
     ]
 }
