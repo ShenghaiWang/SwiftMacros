@@ -53,3 +53,11 @@ struct TestNotification {
         #postNotification(.NSCalendarDayChanged, object: NSObject(), userInfo: ["value": 0])
     }
 }
+
+@AddInit
+struct InitStruct {
+    let a: Int
+    let b: Int?
+    let c: (Int?) -> Void
+    let d: ((Int?) -> Void)?
+}

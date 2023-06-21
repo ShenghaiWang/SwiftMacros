@@ -1,5 +1,8 @@
 import Foundation
 
+@attached(member, names: named(init))
+public macro AddInit() = #externalMacro(module: "Macros", type: "AddInit")
+
 @attached(peer, names: suffixed(Publisher))
 public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublisher")
 

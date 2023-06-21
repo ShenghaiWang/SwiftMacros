@@ -59,7 +59,7 @@ final class SingletonTests: XCTestCase {
             }
             """,
             diagnostics: [
-                DiagnosticSpec(message: "Can only be applied to struct or class", line: 1, column: 1)
+                DiagnosticSpec(message: "Can only be applied to a struct or class", line: 1, column: 1)
             ],
             macros: testMacros
         )

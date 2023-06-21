@@ -11,7 +11,9 @@ A practical collection of Swift Macros that help code correctly and smartly.
 | Macro | Description  |
 |------------|------------------------------------------------------------|
 | @AddPublisher |Generate a Combine publisher to a Combine subject so that we can have a limited ACL for the subject |
-|               |<pre>@AutoPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
+|               |<pre>@AddPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
+| @AddInit      |Generate initialiser for the class/struct. the variables with optional types will have nil as default values |
+|               |<pre>@AddInit<br>struct InitStruct {<br>    let a: Int<br>    let b: Int?<br>    let c: (Int?) -> Void<br>    let d: ((Int?) -> Void)?<br>}</pre>|
 | #encode    |Encode an Encodable to data using JSONEncoder |
 |            |<pre>#encode(value)</pre>|
 | #decode    |Decode a Decodable to a typed value using JSONDecoder  |

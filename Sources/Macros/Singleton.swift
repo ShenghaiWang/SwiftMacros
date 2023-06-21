@@ -8,7 +8,7 @@ public struct Singleton: MemberMacro {
                                                                  providingMembersOf declaration: Declaration,
                                                                  in context: Context) throws -> [DeclSyntax] {
         guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl].contains(declaration.kind) else {
-            throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to struct or class")
+            throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to a struct or class")
         }
         let identifier = (declaration as? StructDeclSyntax)?.identifier ?? (declaration as? ClassDeclSyntax)?.identifier ?? ""
         var override = ""
