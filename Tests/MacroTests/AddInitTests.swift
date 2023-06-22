@@ -132,4 +132,29 @@ final class AddInitTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testAddInitToActorMacro() {
+        assertMacroExpansion(
+            """
+            @AddInit
+            actor A {
+                let a: Int
+                let b: Int?
+            }
+            """,
+            expandedSource:
+            """
+
+            actor A {
+                let a: Int
+                let b: Int?
+                init(a: Int, b: Int? = nil) {
+                    self.a = a
+                    self.b = b
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
 }

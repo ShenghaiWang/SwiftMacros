@@ -7,8 +7,8 @@ public struct AddInit: MemberMacro {
                                  Context: MacroExpansionContext>(of node: AttributeSyntax,
                                                                  providingMembersOf declaration: Declaration,
                                                                  in context: Context) throws -> [DeclSyntax] {
-        guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl].contains(declaration.kind) else {
-            throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to a struct or class")
+        guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl, .actorDecl].contains(declaration.kind) else {
+            throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to a struct, class or actor")
         }
         var parameters: [String] = []
         var body: [String] = []

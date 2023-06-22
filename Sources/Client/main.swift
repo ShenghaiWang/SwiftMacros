@@ -46,3 +46,12 @@ struct InitStruct {
     let c: (Int?) -> Void
     let d: ((Int?) -> Void)?
 }
+
+@AddInit
+actor InitActor {
+    let a: Int
+    let b: Int?
+    let c: (Int?) -> Void
+    let d: ((Int?) -> Void)?
+}
+
