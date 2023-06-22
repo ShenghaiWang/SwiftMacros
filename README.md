@@ -10,6 +10,8 @@ A practical collection of Swift Macros that help code correctly and smartly.
 
 | Macro | Description  |
 |------------|------------------------------------------------------------|
+|@AddAssociatedValueVariable|Add variables to retrieve the associated values|
+|    |<pre>@AddAssociatedValueVariable<br>enum MyEnum {<br>    case first<br>    case second(Int)<br>    case third(String, Int)<br>    case forth(a: String, b: Int), forth2(String, Int)<br>    case fifth(() -> Void)<br>}</pre>|
 | @AddPublisher |Generate a Combine publisher to a Combine subject so that we can have a limited ACL for the subject |
 |               |<pre>@AddPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
 | @AddInit      |Generate initialiser for the class/struct/actor. the variables with optional types will have nil as default values |

@@ -55,3 +55,13 @@ actor InitActor {
     let d: ((Int?) -> Void)?
 }
 
+@AddAssociatedValueVariable
+enum MyEnum {
+    case first
+    case second(Int)
+    case third(String, Int)
+    case forth(a: String, b: Int), forth2(String, Int)
+    case seventh(() -> Void)
+}
+
+assert(MyEnum.first.forth2Value == nil)

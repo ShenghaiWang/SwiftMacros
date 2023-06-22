@@ -1,5 +1,8 @@
 import Foundation
 
+@attached(member, names: arbitrary)
+public macro AddAssociatedValueVariable() = #externalMacro(module: "Macros", type: "AddAssociatedValueVariable")
+
 @attached(member, names: named(init))
 public macro AddInit() = #externalMacro(module: "Macros", type: "AddInit")
 
