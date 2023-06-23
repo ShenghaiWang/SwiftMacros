@@ -65,3 +65,14 @@ enum MyEnum {
 }
 
 assert(MyEnum.first.forth2Value == nil)
+
+let url = #builURL("http://google.com",
+                   URLScheme(.https),
+                   URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")]))
+
+let url2 = buildURL {
+    "http://google.com"
+    URLScheme(.https)
+    URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])
+}
+

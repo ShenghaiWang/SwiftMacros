@@ -16,6 +16,8 @@ A practical collection of Swift Macros that help code correctly and smartly.
 |               |<pre>@AddPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
 | @AddInit      |Generate initialiser for the class/struct/actor. the variables with optional types will have nil as default values |
 |               |<pre>@AddInit<br>struct InitStruct {<br>    let a: Int<br>    let b: Int?<br>    let c: (Int?) -> Void<br>    let d: ((Int?) -> Void)?<br>}</pre>|
+| #buildURL    |Build a url from components. This solution addes in a resultBulder `URLBuilder`, which can be used directly if prefer builder pattern. |
+|            |<pre>let url = #builURL("http://google.com",<br>                   URLScheme(.https),<br>                   URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")]))<br>let url2 = buildURL {<br>    "http://google.com"<br>    URLScheme(.https)<br>    URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])<br>}</pre>|
 | #encode    |Encode an Encodable to data using JSONEncoder |
 |            |<pre>#encode(value)</pre>|
 | #decode    |Decode a Decodable to a typed value using JSONDecoder  |
