@@ -18,6 +18,8 @@ A practical collection of Swift Macros that help code correctly and smartly.
 |               |<pre>@AddInit<br>struct InitStruct {<br>    let a: Int<br>    let b: Int?<br>    let c: (Int?) -> Void<br>    let d: ((Int?) -> Void)?<br>}</pre>|
 | #buildURL    |Build a url from components. This solution addes in a resultBulder `URLBuilder`, which can be used directly if prefer builder pattern. |
 |            |<pre>let url = #buildURL("http://google.com",<br>                   URLScheme.https,<br>                   URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")]))<br>let url2 = buildURL {<br>    "http://google.com"<br>    URLScheme.https<br>    URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])<br>}</pre>|
+| #buildURLRequest    |Build a URLRequest from components. This solution addes in a resultBulder `URLRequestBuilder`, which can be used directly if prefer builder pattern. |
+|            |<pre>let urlrequest = #buildURLRequest(url!, RequestTimeOutInterval(100))<br>let urlRequest2 = buildURLRequest {<br>    url!<br>    RequestTimeOutInterval(100)<br>}</pre>|
 | #encode    |Encode an Encodable to data using JSONEncoder |
 |            |<pre>#encode(value)</pre>|
 | #decode    |Decode a Decodable to a typed value using JSONDecoder  |
