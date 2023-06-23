@@ -10,6 +10,9 @@ public macro AddInit() = #externalMacro(module: "Macros", type: "AddInit")
 public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublisher")
 
 @freestanding(expression)
+public macro buildURL(_ components: URLComponent...) -> URL? = #externalMacro(module: "Macros", type: "BuildURL")
+
+@freestanding(expression)
 public macro encode(_ value: Encodable,
                     outputFormatting: JSONEncoder.OutputFormatting = [],
                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
