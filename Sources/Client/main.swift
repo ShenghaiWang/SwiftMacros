@@ -75,3 +75,11 @@ let url2 = buildURL {
     URLScheme.https
     URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])
 }
+
+let urlrequest = #buildURLRequest(url!, RequestTimeOutInterval(100))
+let urlRequest2 = buildURLRequest {
+    url!
+    RequestTimeOutInterval(100)
+}
+
+print(urlrequest?.timeoutInterval)

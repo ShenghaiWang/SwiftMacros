@@ -8,6 +8,7 @@ struct MacroPlugin: CompilerPlugin {
         AddInit.self,
         AddPublisher.self,
         BuildURL.self,
+        BuildURLRequest.self,
         Encode.self,
         Decode.self,
         PostNotification.self,

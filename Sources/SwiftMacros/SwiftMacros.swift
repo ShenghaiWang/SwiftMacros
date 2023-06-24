@@ -13,6 +13,9 @@ public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublish
 public macro buildURL(_ components: URLComponent...) -> URL? = #externalMacro(module: "Macros", type: "BuildURL")
 
 @freestanding(expression)
+public macro buildURLRequest(_ components: URLRequestComponent...) -> URLRequest? = #externalMacro(module: "Macros", type: "BuildURLRequest")
+
+@freestanding(expression)
 public macro encode(_ value: Encodable,
                     outputFormatting: JSONEncoder.OutputFormatting = [],
                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
