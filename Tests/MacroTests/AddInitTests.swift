@@ -157,4 +157,98 @@ final class AddInitTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testAddInitWithMockMacro() {
+        assertMacroExpansion(
+            """
+            @AddInit(withMock: true, randomMockValue: false)
+            actor A {
+                let a: Int
+                let b: Int?
+                let c: (Int) -> Int
+            }
+            """,
+            expandedSource:
+            """
+
+            actor A {
+                let a: Int
+                let b: Int?
+                let c: (Int) -> Int
+                init(a: Int, b: Int? = nil, c: @escaping (Int) -> Int) {
+                    self.a = a
+                    self.b = b
+                    self.c = c
+                }
+                #if DEBUG
+                static let mock = A(a: 1, b: nil, c: { _ in
+                        return 1
+                    })
+                #endif
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func testAddInitWithMockCollectionTypesMacro() {
+        assertMacroExpansion(
+            """
+            @AddInit(withMock: true, randomMockValue: false)
+            actor A {
+                let a: [Int]
+                let b: Set<Int>
+                let c: [Int: String]
+            }
+            """,
+            expandedSource:
+            """
+
+            actor A {
+                let a: [Int]
+                let b: Set<Int>
+                let c: [Int: String]
+                init(a: [Int], b: Set<Int>, c: [Int: String]) {
+                    self.a = a
+                    self.b = b
+                    self.c = c
+                }
+                #if DEBUG
+                static let mock = A(a: [1], b: [1], c: [1: "abcd"])
+                #endif
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func testAddInitWithCustomisedTypesMacro() {
+        assertMacroExpansion(
+            """
+            struct A {
+                let a: Int
+            }
+            @AddInit(withMock: true, randomMockValue: false)
+            struct B {
+                let a: A
+            }
+            """,
+            expandedSource:
+            """
+            struct A {
+                let a: Int
+            }
+            struct B {
+                let a: A
+                init(a: A) {
+                    self.a = a
+                }
+                #if DEBUG
+                static let mock = B(a: A.mock)
+                #endif
+            }
+            """,
+            macros: testMacros
+        )
+    }
 }
