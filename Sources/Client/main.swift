@@ -110,5 +110,4 @@ let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
                       Month(10),
                       Year(1909),
                       YearForWeekOfYear(2025))
-
-print(date)
+let string = #formatDate(Date(), dateStyle: .full)
