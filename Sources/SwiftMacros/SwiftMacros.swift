@@ -65,6 +65,57 @@ public macro formatDate(_ date: Date,
                         shortStandaloneQuarterSymbols: [String]? = nil,
                         eraSymbols: [String]? = nil,
                         longEraSymbols: [String]? = nil) -> String = #externalMacro(module: "Macros", type: "FormatDate")
+@freestanding(expression)
+public macro formatDateComponents(from fromDate: Date,
+                                  to toDate: Date,
+                                  allowedUnits: NSCalendar.Unit? = nil,
+                                  allowsFractionalUnits: Bool? = nil,
+                                  calendar: Calendar? = nil,
+                                  collapsesLargestUnit: Bool? = nil,
+                                  includesApproximationPhrase: Bool? = nil,
+                                  includesTimeRemainingPhrase: Bool? = nil,
+                                  maximumUnitCount: Int? = nil,
+                                  unitsStyle: DateComponentsFormatter.UnitsStyle? = nil,
+                                  zeroFormattingBehavior: DateComponentsFormatter.ZeroFormattingBehavior? = nil,
+                                  formattingContext: Formatter.Context? = nil,
+                                  referenceDate: Date? = nil) -> String? = #externalMacro(module: "Macros", type: "FormatDateComponents")
+@freestanding(expression)
+public macro formatDateComponents(fromInterval timeInterval: TimeInterval,
+                                  allowedUnits: NSCalendar.Unit? = nil,
+                                  allowsFractionalUnits: Bool? = nil,
+                                  calendar: Calendar? = nil,
+                                  collapsesLargestUnit: Bool? = nil,
+                                  includesApproximationPhrase: Bool? = nil,
+                                  includesTimeRemainingPhrase: Bool? = nil,
+                                  maximumUnitCount: Int? = nil,
+                                  unitsStyle: DateComponentsFormatter.UnitsStyle? = nil,
+                                  zeroFormattingBehavior: DateComponentsFormatter.ZeroFormattingBehavior? = nil,
+                                  formattingContext: Formatter.Context? = nil,
+                                  referenceDate: Date? = nil) -> String? = #externalMacro(module: "Macros", type: "FormatDateComponents")
+
+@freestanding(expression)
+public macro formatDateComponents(fromComponents components: DateComponents,
+                                  allowedUnits: NSCalendar.Unit? = nil,
+                                  allowsFractionalUnits: Bool? = nil,
+                                  calendar: Calendar? = nil,
+                                  collapsesLargestUnit: Bool? = nil,
+                                  includesApproximationPhrase: Bool? = nil,
+                                  includesTimeRemainingPhrase: Bool? = nil,
+                                  maximumUnitCount: Int? = nil,
+                                  unitsStyle: DateComponentsFormatter.UnitsStyle? = nil,
+                                  zeroFormattingBehavior: DateComponentsFormatter.ZeroFormattingBehavior? = nil,
+                                  formattingContext: Formatter.Context? = nil,
+                                  referenceDate: Date? = nil) -> String? = #externalMacro(module: "Macros", type: "FormatDateComponents")
+
+@freestanding(expression)
+public macro formatDateInterval(from fromDate: Date,
+                                to toDate: Date,
+                                dateStyle: DateIntervalFormatter.Style? = nil,
+                                timeStyle: DateIntervalFormatter.Style? = nil,
+                                dateTemplate: String? = nil,
+                                calendar: Calendar? = nil,
+                                locale: Locale? = nil,
+                                timeZone: TimeZone? = nil) -> String = #externalMacro(module: "Macros", type: "FormatDateInterval")
 
 @attached(peer, names: named(mock))
 public macro Mock(typeName: String, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "Mock")

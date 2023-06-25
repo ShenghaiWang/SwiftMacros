@@ -8,7 +8,7 @@ final class FormateDateTests: XCTestCase {
         "formatDate": FormatDate.self,
     ]
 
-    func testBuildURLMacro() {
+    func testFormateDateMacro() {
         assertMacroExpansion(
             """
             let date = #formatDate(Date(), dateStyle: .full)

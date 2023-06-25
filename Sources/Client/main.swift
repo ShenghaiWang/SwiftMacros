@@ -112,15 +112,5 @@ let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
                       YearForWeekOfYear(2025))
 let string = #formatDate(Date(), dateStyle: .full)
 
-let formatter = DateIntervalFormatter()
-formatter.dateStyle = .short
-formatter.timeStyle = .none
-
-
-// Create two dates that are exactly 1 day apart.
-let startDate = Date()
-let endDate = Date(timeInterval: 86400, since: startDate)
-
-
-// Use the configured formatter to generate the string.
-let outputString = formatter.string(from: startDate, to: endDate)
+let intervalString = #formatDateInterval(from: Date(), to: Date(timeIntervalSinceNow: 200))
+let componentsString = #formatDateComponents(from: Date(), to: Date(timeIntervalSinceNow: 200), allowedUnits: [.day, .hour, .minute, .second])
