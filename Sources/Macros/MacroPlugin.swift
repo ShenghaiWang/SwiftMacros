@@ -13,6 +13,8 @@ struct MacroPlugin: CompilerPlugin {
         Encode.self,
         Decode.self,
         FormatDate.self,
+        FormatDateComponents.self,
+        FormatDateInterval.self,
         Mock.self,
         PostNotification.self,
         Singleton.self,

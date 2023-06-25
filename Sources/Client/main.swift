@@ -111,3 +111,6 @@ let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
                       Year(1909),
                       YearForWeekOfYear(2025))
 let string = #formatDate(Date(), dateStyle: .full)
+
+let intervalString = #formatDateInterval(from: Date(), to: Date(timeIntervalSinceNow: 200))
+let componentsString = #formatDateComponents(from: Date(), to: Date(timeIntervalSinceNow: 200), allowedUnits: [.day, .hour, .minute, .second])

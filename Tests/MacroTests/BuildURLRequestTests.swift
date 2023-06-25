@@ -8,7 +8,7 @@ final class BuildURLRequestTests: XCTestCase {
         "buildURLRequest": BuildURLRequest.self,
     ]
 
-    func testBuildURLMacro() {
+    func testBuildURLRequestMacro() {
         assertMacroExpansion(
             """
             let url = #buildURLRequest(URL(string: "http://google.com")!, RequestTimeOutInterval(100))

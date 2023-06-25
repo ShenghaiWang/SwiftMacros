@@ -8,7 +8,7 @@ final class BuildDateTests: XCTestCase {
         "buildDate": BuildDate.self,
     ]
 
-    func testBuildURLMacro() {
+    func testBuildDateMacro() {
         assertMacroExpansion(
             """
             let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
