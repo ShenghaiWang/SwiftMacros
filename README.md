@@ -26,6 +26,8 @@ A practical collection of Swift Macros that help code correctly and smartly.
 |            |<pre>#encode(value)</pre>|
 | #decode    |Decode a Decodable to a typed value using JSONDecoder  |
 |            |<pre>#decode(TestStruct.self, from: data)</pre>|
+| #formatDate |Format date to a string |
+|            |<pre>#formatDate(Date(), dateStyle: .full)</pre>|
 | @Mock      |Generate a static variable `mock` using the attached initializer. <br>For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit` to generate this variable. |
 |            |<pre>class AStruct {<br>    let a: Float<br>    @Mock(typeName: "AStruct")<br>    init(a: Float) {<br>        self.a = a<br>    }<br>}</pre>|
 | #postNotification    | An easy way to post notifications  |

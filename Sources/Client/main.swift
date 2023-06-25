@@ -111,4 +111,10 @@ let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
                       Year(1909),
                       YearForWeekOfYear(2025))
 
-print(date)
+let dateFormatter = DateFormatter()
+dateFormatter.dateStyle = .medium
+dateFormatter.timeStyle = .medium
+print("here")
+print(dateFormatter.string(from: Date()))
+
+let string = #formatDate(Date(), dateStyle: .full)
