@@ -37,6 +37,35 @@ public macro decode<T>(_ type: T.Type,
                        allowsJSON5: Bool = false,
                        assumesTopLevelDictionary: Bool = false) -> T = #externalMacro(module: "Macros", type: "Decode")
 
+@freestanding(expression)
+public macro formatDate(_ date: Date,
+                        dateStyle: DateFormatter.Style? = nil,
+                        timeStyle:  DateFormatter.Style? = nil,
+                        localizedDateFormatFromTemplate: String? = nil,
+                        formattingContext: Formatter.Context? = nil,
+                        formatterBehavior: DateFormatter.Behavior? = nil,
+                        doesRelativeDateFormatting: Bool? = nil,
+                        amSymbol: String? = nil,
+                        pmSymbol: String? = nil,
+                        weekdaySymbols: [String]? = nil,
+                        shortWeekdaySymbols: [String]? = nil,
+                        veryShortWeekdaySymbols: [String]? = nil,
+                        standaloneWeekdaySymbols: [String]? = nil,
+                        shortStandaloneWeekdaySymbols: [String]? = nil,
+                        veryShortStandaloneWeekdaySymbols: [String]? = nil,
+                        monthSymbols: [String]? = nil,
+                        shortMonthSymbols: [String]? = nil,
+                        veryShortMonthSymbols: [String]? = nil,
+                        standaloneMonthSymbols: [String]? = nil,
+                        shortStandaloneMonthSymbols: [String]? = nil,
+                        veryShortStandaloneMonthSymbols: [String]? = nil,
+                        quarterSymbols: [String]? = nil,
+                        shortQuarterSymbols: [String]? = nil,
+                        standaloneQuarterSymbols: [String]? = nil,
+                        shortStandaloneQuarterSymbols: [String]? = nil,
+                        eraSymbols: [String]? = nil,
+                        longEraSymbols: [String]? = nil) -> String = #externalMacro(module: "Macros", type: "FormatDate")
+
 @attached(peer, names: named(mock))
 public macro Mock(typeName: String, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "Mock")
 
