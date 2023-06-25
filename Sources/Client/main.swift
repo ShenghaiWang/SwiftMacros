@@ -1,6 +1,7 @@
 import SwiftMacros
 import Foundation
 import Combine
+import SwiftUI
 
 @Singleton
 struct TestSingletonMacro {
@@ -83,3 +84,23 @@ let urlRequest2 = buildURLRequest {
 }
 
 print(urlrequest?.timeoutInterval)
+
+class AStruct {
+    let a: Float
+    @Mock(typeName: "AStruct")
+    init(a: Float) {
+        self.a = a
+    }
+}
+
+@AddInit(withMock: true)
+class BStruct {
+    let a: Float
+    let b: CStruct
+}
+
+struct CStruct {
+    static let mock = CStruct()
+}
+print(AStruct.mock.a)
+print(BStruct.mock.a)

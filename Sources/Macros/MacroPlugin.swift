@@ -11,6 +11,7 @@ struct MacroPlugin: CompilerPlugin {
         BuildURLRequest.self,
         Encode.self,
         Decode.self,
+        Mock.self,
         PostNotification.self,
         Singleton.self,
     ]

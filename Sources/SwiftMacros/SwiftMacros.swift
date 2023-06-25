@@ -3,8 +3,8 @@ import Foundation
 @attached(member, names: arbitrary)
 public macro AddAssociatedValueVariable() = #externalMacro(module: "Macros", type: "AddAssociatedValueVariable")
 
-@attached(member, names: named(init))
-public macro AddInit() = #externalMacro(module: "Macros", type: "AddInit")
+@attached(member, names: named(init), named(mock))
+public macro AddInit(withMock: Bool = false, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "AddInit")
 
 @attached(peer, names: suffixed(Publisher))
 public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublisher")
@@ -33,6 +33,9 @@ public macro decode<T>(_ type: T.Type,
                        userInfo: [CodingUserInfoKey: Any] = [:],
                        allowsJSON5: Bool = false,
                        assumesTopLevelDictionary: Bool = false) -> T = #externalMacro(module: "Macros", type: "Decode")
+
+@attached(peer, names: named(mock))
+public macro Mock(typeName: String, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "Mock")
 
 @freestanding(expression)
 public macro postNotification(_ name: NSNotification.Name,
