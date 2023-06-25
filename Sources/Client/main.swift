@@ -104,3 +104,11 @@ struct CStruct {
 }
 print(AStruct.mock.a)
 print(BStruct.mock.a)
+
+let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
+                      Date(),
+                      Month(10),
+                      Year(1909),
+                      YearForWeekOfYear(2025))
+
+print(date)
