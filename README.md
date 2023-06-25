@@ -16,9 +16,11 @@ A practical collection of Swift Macros that help code correctly and smartly.
 |               |<pre>@AddPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
 | @AddInit      |Generate initialiser for the class/struct/actor. the variables with optional types will have nil as default values. Using `withMock: true` if want to generate mock data. <br> For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit` to generate this variable. |
 |               |<pre>@AddInit<br>struct InitStruct {<br>    let a: Int<br>    let b: Int?<br>    let c: (Int?) -> Void<br>    let d: ((Int?) -> Void)?<br>}<br>class AStruct {<br>    let a: Float<br>    @Mock(typeName: "AStruct")<br>    init(a: Float) {<br>        self.a = a<br>    }<br>}</pre>|
-| #buildURL    |Build a url from components. This solution addes in a resultBulder `URLBuilder`, which can be used directly if prefer builder pattern. |
+| #buildDate    |Build a Date from components<br>This solution addes in a resultBulder `DateBuilder`, which can be used directly if prefer builder pattern.<br>Note: this is for a simpler API. Please use it with caution in places that require efficiency.|
+|            |<pre>let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),<br>                      Date(),<br>                      Month(10),<br>                      Year(1909),<br>                      YearForWeekOfYear(2025))</pre>|
+| #buildURL    |Build a url from components.<br>This solution addes in a resultBulder `URLBuilder`, which can be used directly if prefer builder pattern. |
 |            |<pre>let url = #buildURL("http://google.com",<br>                   URLScheme.https,<br>                   URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")]))<br>let url2 = buildURL {<br>    "http://google.com"<br>    URLScheme.https<br>    URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])<br>}</pre>|
-| #buildURLRequest    |Build a URLRequest from components. This solution addes in a resultBulder `URLRequestBuilder`, which can be used directly if prefer builder pattern. |
+| #buildURLRequest    |Build a URLRequest from components.<br>This solution addes in a resultBulder `URLRequestBuilder`, which can be used directly if prefer builder pattern. |
 |            |<pre>let urlrequest = #buildURLRequest(url!, RequestTimeOutInterval(100))<br>let urlRequest2 = buildURLRequest {<br>    url!<br>    RequestTimeOutInterval(100)<br>}</pre>|
 | #encode    |Encode an Encodable to data using JSONEncoder |
 |            |<pre>#encode(value)</pre>|

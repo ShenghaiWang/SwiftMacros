@@ -10,6 +10,9 @@ public macro AddInit(withMock: Bool = false, randomMockValue: Bool = true) = #ex
 public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublisher")
 
 @freestanding(expression)
+public macro buildDate(_ components: DateComponent...) -> Date? = #externalMacro(module: "Macros", type: "BuildDate")
+
+@freestanding(expression)
 public macro buildURL(_ components: URLComponent...) -> URL? = #externalMacro(module: "Macros", type: "BuildURL")
 
 @freestanding(expression)
