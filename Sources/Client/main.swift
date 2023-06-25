@@ -114,3 +114,19 @@ let string = #formatDate(Date(), dateStyle: .full)
 
 let intervalString = #formatDateInterval(from: Date(), to: Date(timeIntervalSinceNow: 200))
 let componentsString = #formatDateComponents(from: Date(), to: Date(timeIntervalSinceNow: 200), allowedUnits: [.day, .hour, .minute, .second])
+
+struct TestAccess {
+    static let cache = NSCache<NSString, AnyObject>()
+
+    // without defalut value
+    // make sure the generic type is the same as the type of the variable
+    @Access<Bool?>(.userDefaults())
+    var isPaidUser: Bool?
+
+    // with default value
+    @Access<Bool>(.userDefaults())
+    var isPaidUser2: Bool = false
+
+    @Access<NSObject?>(.nsCache(TestAccess.cache))
+    var hasPaid: NSObject?
+}
