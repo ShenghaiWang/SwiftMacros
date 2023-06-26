@@ -4,6 +4,7 @@ import SwiftSyntaxMacros
 @main
 struct MacroPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
+        Access.self,
         AddAssociatedValueVariable.self,
         AddInit.self,
         AddPublisher.self,

@@ -1,5 +1,8 @@
 import Foundation
 
+@attached(accessor)
+public macro Access<T>(_ type: AccessContentType) = #externalMacro(module: "Macros", type: "Access")
+
 @attached(member, names: arbitrary)
 public macro AddAssociatedValueVariable() = #externalMacro(module: "Macros", type: "AddAssociatedValueVariable")
 
