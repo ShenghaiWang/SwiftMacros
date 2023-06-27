@@ -22,11 +22,7 @@ public struct AddAssociatedValueVariable: MemberMacro {
                     } else {
                         typeValue = "\(associatedValue)"
                     }
-                    var isPublic = ""
-                    if declaration.modifiers?.compactMap(\.name.tokenKind.keyword).contains(.public) ?? false {
-                        isPublic = "public "
-                    }
-                    let varSyntax = try VariableDeclSyntax("\(raw: isPublic)var \(element.identifier)Value: \(raw: typeValue)?") {
+                    let varSyntax = try VariableDeclSyntax("\(declaration.modifiers ?? ModifierListSyntax())var \(element.identifier)Value: \(raw: typeValue)?") {
                         try IfExprSyntax(
                             "if case let .\(element.identifier)(\(raw: associatedValue.parameterList.toVariableNames)) = self",
                                bodyBuilder: {

@@ -4,7 +4,7 @@ A practical collection of Swift Macros that help code correctly and smartly.
 
 ## Install
 
-    .package(url: "https://github.com/ShenghaiWang/SwiftMacros.git", from: "0.1.0")
+    .package(url: "https://github.com/ShenghaiWang/SwiftMacros.git", from: "1.0.0")
 
 ## Macros
 
