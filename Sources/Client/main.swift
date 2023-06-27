@@ -117,6 +117,7 @@ let componentsString = #formatDateComponents(from: Date(), to: Date(timeInterval
 
 struct TestAccess {
     static let cache = NSCache<NSString, AnyObject>()
+    static let mapTable = NSMapTable<NSString, AnyObject>(keyOptions: .copyIn, valueOptions: .weakMemory)
 
     // without defalut value
     // make sure the generic type is the same as the type of the variable
@@ -129,4 +130,7 @@ struct TestAccess {
 
     @Access<NSObject?>(.nsCache(TestAccess.cache))
     var hasPaid: NSObject?
+
+    @Access<NSObject?>(.nsMapTable(TestAccess.mapTable))
+    var hasPaid2: NSObject?
 }
