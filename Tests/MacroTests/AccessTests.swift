@@ -117,4 +117,40 @@ final class AccessTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testAccessNSMapTableMacro() {
+        assertMacroExpansion(
+            """
+            @Access<NSObject>(.nsMapTable(cache))
+            var isPaidUser1 = NSObject()
+            @Access<NSObject?>(.nsMapTable(cache))
+            var isPaidUser2: NSObject?
+            """,
+            expandedSource:
+            """
+
+            var isPaidUser1 = NSObject() {
+                get {
+                    (cache.object(forKey: "AccessKey_isPaidUser1") as? NSObject) ?? NSObject()
+                }
+                set {
+                    cache.setObject(newValue, forKey: "AccessKey_isPaidUser1")
+                }
+            }
+            var isPaidUser2: NSObject? {
+                get {
+                    (cache.object(forKey: "AccessKey_isPaidUser2") as? NSObject)
+                }
+                set {
+                    if let value = newValue {
+                        cache.setObject(value, forKey: "AccessKey_isPaidUser2")
+                    } else {
+                        cache.removeObject(forKey: "AccessKey_isPaidUser2")
+                    }
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
 }

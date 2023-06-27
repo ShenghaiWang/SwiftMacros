@@ -11,7 +11,7 @@ A practical collection of Swift Macros that help code correctly and smartly.
 | Macro | Description  |
 |------------|------------------------------------------------------------|
 | @Access    |An easy API to access UserDefaults and NSCache. |
-|            |<pre>struct TestAccess {<br>    static let cache = NSCache<NSString, AnyObject>()<br><br>    // Please make sure the generic type is the same as the type of the variable<br>    // Without defalut value<br>    @Access<Bool?>(.userDefaults())<br>    var isPaidUser: Bool?<br><br>    // With default value<br>    @Access< Bool>(.userDefaults())<br>    var isPaidUser2: Bool = false<br><br>    @Access<NSObject?>(.nsCache(TestAccess.cache))<br>    var hasPaid: NSObject?<br>}</pre>|
+|            |<pre>struct TestAccess {<br>    static let cache = NSCache<NSString, AnyObject>()<br><br>    // Please make sure the generic type is the same as the type of the variable<br>    // Without defalut value<br>    @Access<Bool?>(.userDefaults())<br>    var isPaidUser: Bool?<br><br>    // With default value<br>    @Access< Bool>(.userDefaults())<br>    var isPaidUser2: Bool = false<br><br>    @Access<NSObject?>(.nsCache(TestAccess.cache))<br>    var hasPaid: NSObject?<br><br>    @Access<NSObject?>(.nsMapTable(TestAccess.mapTable))<br>    var hasPaid2: NSObject?}</pre>|
 |@AddAssociatedValueVariable|Add variables to retrieve the associated values|
 |    |<pre>@AddAssociatedValueVariable<br>enum MyEnum {<br>    case first<br>    case second(Int)<br>    case third(String, Int)<br>    case forth(a: String, b: Int), forth2(String, Int)<br>    case fifth(() -> Void)<br>}</pre>|
 | @AddPublisher |Generate a Combine publisher to a Combine subject so that we can have a limited ACL for the subject |

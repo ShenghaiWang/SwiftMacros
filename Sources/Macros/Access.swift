@@ -17,15 +17,15 @@ public struct Access: AccessorMacro {
             return processUserDefaults(for: declaration,
                                        userDefaults: firstArg.userDefaults,
                                        type: "\(dataType)")
-        } else if type == "nsCache",
-                  let cache = firstArg.cache,
+        } else if ["nsCache", "nsMapTable"].contains(type),
+                  let object = firstArg.object,
                   let dataType = node.attributeName.as(SimpleTypeIdentifierSyntax.self)?.type {
             let isOptionalType = node.attributeName.as(SimpleTypeIdentifierSyntax.self)?.genericArgumentClause?.arguments
                 .first?.as(GenericArgumentSyntax.self)?.argumentType.is(OptionalTypeSyntax.self) ?? false
-            return processNSCache(for: declaration,
-                                  cache: cache,
-                                  type: "\(dataType)",
-                                  isOptionalType: isOptionalType)
+            return processNSCacheAndNSMapTable(for: declaration,
+                                               object: object,
+                                               type: "\(dataType)",
+                                               isOptionalType: isOptionalType)
         }
 
         return []
@@ -57,10 +57,10 @@ public struct Access: AccessorMacro {
         return [getAccessor, setAccessor]
     }
 
-    private static func processNSCache(for declaration: DeclSyntaxProtocol,
-                                       cache: ExprSyntax,
-                                       type: String,
-                                       isOptionalType: Bool) -> [AccessorDeclSyntax] {
+    private static func processNSCacheAndNSMapTable(for declaration: DeclSyntaxProtocol,
+                                                    object: ExprSyntax,
+                                                    type: String,
+                                                    isOptionalType: Bool) -> [AccessorDeclSyntax] {
         guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
               let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
               binding.accessor == nil else { return [] }
@@ -71,7 +71,7 @@ public struct Access: AccessorMacro {
         let getAccessor: AccessorDeclSyntax =
           """
           get {
-              (\(cache).object(forKey: "AccessKey_\(raw: identifier)") as? \(raw: type))\(raw: defaultValue)
+              (\(object).object(forKey: "AccessKey_\(raw: identifier)") as? \(raw: type))\(raw: defaultValue)
           }
           """
         let setAccessor: AccessorDeclSyntax
@@ -80,9 +80,9 @@ public struct Access: AccessorMacro {
           """
           set {
               if let value = newValue {
-                  \(cache).setObject(value, forKey: "AccessKey_\(raw: identifier)")
+                  \(object).setObject(value, forKey: "AccessKey_\(raw: identifier)")
               } else {
-                  \(cache).removeObject(forKey: "AccessKey_\(raw: identifier)")
+                  \(object).removeObject(forKey: "AccessKey_\(raw: identifier)")
               }
           }
           """
@@ -90,7 +90,7 @@ public struct Access: AccessorMacro {
             setAccessor =
           """
           set {
-              \(cache).setObject(newValue, forKey: "AccessKey_\(raw: identifier)")
+              \(object).setObject(newValue, forKey: "AccessKey_\(raw: identifier)")
           }
           """
         }
@@ -118,7 +118,7 @@ private extension TupleExprElementSyntax {
         }
     }
 
-    var cache: ExprSyntax? {
+    var object: ExprSyntax? {
         expression.as(FunctionCallExprSyntax.self)?.argumentList.first?.as(TupleExprElementSyntax.self)?.expression
     }
 }
