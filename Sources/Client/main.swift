@@ -87,7 +87,7 @@ print(urlrequest?.timeoutInterval)
 
 class AStruct {
     let a: Float
-    @Mock(typeName: "AStruct")
+    @Mock(type: AStruct.self)
     init(a: Float) {
         self.a = a
     }

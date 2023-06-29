@@ -12,7 +12,7 @@ public struct Mock: PeerMacro {
         guard let initializer = declaration.as(InitializerDeclSyntax.self) else {
             throw MacroDiagnostics.errorMacroUsage(message: "Can only apply to an initializer")
         }
-        guard let typeName = node.argument(for: "typeName")?.as(StringLiteralExprSyntax.self)?.segments.first else {
+        guard let typeName = node.argument(for: "type")?.as(MemberAccessExprSyntax.self)?.base else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify type name")
         }
 

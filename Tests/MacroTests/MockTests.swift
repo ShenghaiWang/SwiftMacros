@@ -14,7 +14,7 @@ final class MockTests: XCTestCase {
             struct AStruct {
                 let a: Int
 
-                @Mock(typeName: "AStruct", randomMockValue: false)
+                @Mock(type: AStruct.self, randomMockValue: false)
                 init(a: Int) {
                     self.a = a
                 }

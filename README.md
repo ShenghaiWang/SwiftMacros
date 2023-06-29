@@ -34,8 +34,8 @@ A practical collection of Swift Macros that help code correctly and smartly.
 |            |<pre>#formatDateComponents(from: Date(), to: Date(), allowedUnits: [.day, .hour, .minute, .second])<br>#formatDateComponents(fromInterval: 100, allowedUnits: [.day, .hour, .minute, .second])<br>#formatDateComponents(fromComponents: DateComponents(hour: 10), allowedUnits: [.day, .hour, .minute, .second])</pre>|
 | #formatDateInterval |Format two dates into interval string |
 |            |<pre>#formatDateInterval(from: Date(), to: Date(), dateStyle: .short)</pre>|
-| @Mock      |Generate a static variable `mock` using the attached initializer. <br>For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit` to generate this variable. |
-|            |<pre>class AStruct {<br>    let a: Float<br>    @Mock(typeName: "AStruct")<br>    init(a: Float) {<br>        self.a = a<br>    }<br>}</pre>|
+| @Mock      |Generate a static variable `mock` using the attached initializer. <br>For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit(withMock: true)` to generate this variable. |
+|            |<pre>class AStruct {<br>    let a: Float<br>    @Mock(type: AStruct.self)<br>    init(a: Float) {<br>        self.a = a<br>    }<br>}</pre>|
 | #postNotification    | An easy way to post notifications  |
 |                      |<pre>#postNotification(.NSCalendarDayChanged)</pre>|
 | @Singleton |Generate Swift singleton code for struct and class types  |

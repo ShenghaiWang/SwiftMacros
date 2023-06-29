@@ -121,7 +121,7 @@ public macro formatDateInterval(from fromDate: Date,
                                 timeZone: TimeZone? = nil) -> String = #externalMacro(module: "Macros", type: "FormatDateInterval")
 
 @attached(peer, names: named(mock))
-public macro Mock(typeName: String, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "Mock")
+public macro Mock(type: Any.Type, randomMockValue: Bool = true) = #externalMacro(module: "Macros", type: "Mock")
 
 @freestanding(expression)
 public macro postNotification(_ name: NSNotification.Name,
