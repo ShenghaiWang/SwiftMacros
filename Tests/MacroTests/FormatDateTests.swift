@@ -3,7 +3,7 @@ import SwiftSyntaxMacrosTestSupport
 import XCTest
 import Macros
 
-final class FormateDateTests: XCTestCase {
+final class FormatDateTests: XCTestCase {
     let testMacros: [String: Macro.Type] = [
         "formatDate": FormatDate.self,
     ]
