@@ -1,6 +1,6 @@
 # SwiftMacros
 
-A practical collection of Swift Macros that help code correctly and smartly.
+A practical collection of Swift Macros that help code correctly and swiftly.
 
 ## Install
 
