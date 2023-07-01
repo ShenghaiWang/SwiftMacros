@@ -89,6 +89,8 @@ extension SimpleTypeIdentifierSyntax {
         guard let type = self.as(SimpleTypeIdentifierSyntax.self)?.name.text else { return nil }
         if let fun = mockFunctions[type] {
             return fun(randomValue)
+        } else if name.text == "Void" {
+            return "return"
         } else if name.text != "Set" {
             return "\(type).mock"
         }

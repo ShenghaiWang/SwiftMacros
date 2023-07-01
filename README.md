@@ -6,7 +6,7 @@ A practical collection of Swift Macros that help code correctly and swiftly.
 
     .package(url: "https://github.com/ShenghaiWang/SwiftMacros.git", from: "1.0.0")
 
-## Macros
+## Macros [API Doc](https://shenghaiwang.github.io/swiftmacros/documentation/swiftmacros/)
 
 | Macro | Description  |
 |------------|------------------------------------------------------------|
@@ -14,9 +14,9 @@ A practical collection of Swift Macros that help code correctly and swiftly.
 |            |<pre>struct TestAccess {<br>    static let cache = NSCache<NSString, AnyObject>()<br><br>    // Please make sure the generic type is the same as the type of the variable<br>    // Without defalut value<br>    @Access<Bool?>(.userDefaults())<br>    var isPaidUser: Bool?<br><br>    // With default value<br>    @Access< Bool>(.userDefaults())<br>    var isPaidUser2: Bool = false<br><br>    @Access<NSObject?>(.nsCache(TestAccess.cache))<br>    var hasPaid: NSObject?<br><br>    @Access<NSObject?>(.nsMapTable(TestAccess.mapTable))<br>    var hasPaid2: NSObject?<br>}</pre>|
 |@AddAssociatedValueVariable|Add variables to retrieve the associated values|
 |    |<pre>@AddAssociatedValueVariable<br>enum MyEnum {<br>    case first<br>    case second(Int)<br>    case third(String, Int)<br>    case forth(a: String, b: Int), forth2(String, Int)<br>    case fifth(() -> Void)<br>}</pre>|
-| @AddPublisher |Generate a Combine publisher to a Combine subject so that we can have a limited ACL for the subject |
+| @AddInit      |Generate initialiser for the class/struct/actor. The variables with optional types will have nil as default values. Using `withMock: true` if want to generate mock data. <br> For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit(withMock: true)` to generate this variable. |
+| @AddPublisher |Generate a Combine publisher to a Combine subject in order to avoid overexposing subject variable |
 |               |<pre>@AddPublisher<br>private let mySubject = PassthroughSubject<Void, Never>()</pre>|
-| @AddInit      |Generate initialiser for the class/struct/actor. the variables with optional types will have nil as default values. Using `withMock: true` if want to generate mock data. <br> For custmoised data type, it will use `Type.mock`. In case there is no this value, need to define this yourself or use `@Mock` or `@AddInit(withMock: true)` to generate this variable. |
 |               |<pre>@AddInit<br>struct InitStruct {<br>    let a: Int<br>    let b: Int?<br>    let c: (Int?) -> Void<br>    let d: ((Int?) -> Void)?<br>}<br>@AddInit(withMock: true)<br>class AStruct {<br>    let a: Float<br>}</pre>|
 | #buildDate    |Build a Date from components<br>This solution addes in a resultBulder `DateBuilder`, which can be used directly if prefer builder pattern.<br>Note: this is for a simpler API. Please use it with caution in places that require efficiency.|
 |            |<pre>let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),<br>                      Date(),<br>                      Month(10),<br>                      Year(1909),<br>                      YearForWeekOfYear(2025))</pre>|
