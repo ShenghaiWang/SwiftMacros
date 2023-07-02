@@ -185,11 +185,13 @@ public macro AddInit(withMock: Bool = false, randomMockValue: Bool = true) = #ex
 /// Generate a Combine publisher to a Combine subject in order to avoid overexposing subject variable
 ///
 /// For example:
+///
+/// ```swift
 /// struct MyType {
 ///     @AddPublisher
 ///     private let mySubject = PassthroughSubject<Void, Never>()
 /// }
-///
+///```
 /// will expand to
 ///
 /// ```swift
@@ -223,7 +225,7 @@ public macro AddPublisher() = #externalMacro(module: "Macros", type: "AddPublish
 ///                      Year(1909)
 ///                      YearForWeekOfYear(2025))
 /// ```
-/// Note: this is for a simpler API. Please use it with caution in places that require efficiency.
+/// > Note: this is for a simpler API. Please use it with caution in places that require efficiency.
 @freestanding(expression)
 public macro buildDate(_ components: DateComponent...) -> Date? = #externalMacro(module: "Macros", type: "BuildDate")
 
