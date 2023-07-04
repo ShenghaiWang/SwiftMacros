@@ -6,7 +6,7 @@ A practical collection of Swift Macros that help code correctly and swiftly.
 
     .package(url: "https://github.com/ShenghaiWang/SwiftMacros.git", from: "1.0.0")
 
-## Macros [API Doc](https://shenghaiwang.github.io/swiftmacros/documentation/swiftmacros/)
+## Macros [API Doc](https://m.timwang.au/swiftmacros/documentation/swiftmacros/)
 
 | Macro | Description  |
 |------------|------------------------------------------------------------|
