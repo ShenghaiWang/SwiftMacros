@@ -37,10 +37,6 @@ public struct Access: AccessorMacro {
         guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
               let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
               binding.accessor == nil else { return [] }
-        var defaultValue = ""
-        if let value = binding.initializer?.value {
-            defaultValue = " ?? \(value)"
-        }
         let getAccessor: AccessorDeclSyntax =
           """
           get {
