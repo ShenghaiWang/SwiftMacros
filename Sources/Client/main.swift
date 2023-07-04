@@ -2,6 +2,7 @@ import SwiftMacros
 import Foundation
 import Combine
 import SwiftUI
+import SwiftKeychain
 
 @Singleton
 struct TestSingletonMacro {
@@ -93,8 +94,6 @@ let urlRequest2 = buildURLRequest {
     RequestTimeOutInterval(100)
 }
 
-print(urlrequest?.timeoutInterval)
-
 class AStruct {
     let a: Float
     @Mock(type: AStruct.self)
@@ -143,4 +142,7 @@ struct TestAccess {
 
     @Access<NSObject?>(.nsMapTable(TestAccess.mapTable))
     var hasPaid2: NSObject?
+
+    @Access<TestStruct?>(.keychain)
+    var keychainValue: TestStruct?
 }

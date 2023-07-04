@@ -1,6 +1,6 @@
 import Foundation
 
-/// An easy interface to retrieve value from or store value to ``AccessContentType`` like [UserDefault](https://developer.apple.com/documentation/foundation/userdefaults), [NSCache](https://developer.apple.com/documentation/foundation/nscache), [NSMAPTable](https://developer.apple.com/documentation/foundation/nsmaptable).
+/// An easy interface to retrieve value from or store value to ``AccessContentType`` like [UserDefault](https://developer.apple.com/documentation/foundation/userdefaults), [NSCache](https://developer.apple.com/documentation/foundation/nscache), [NSMAPTable](https://developer.apple.com/documentation/foundation/nsmaptable) and Keychain
 ///
 /// - Parameters:
 ///   - type: One type of ``AccessContentType``.
@@ -25,6 +25,9 @@ import Foundation
 ///
 ///     @Access<NSObject?>(.nsMapTable(TestAccess.mapTable))
 ///     var hasPaid2: NSObject?
+///
+///     @Access<CodableStruct?>(.keychain)
+///     var value: CodableStruct?
 /// }
 /// ```
 /// will expand to
@@ -85,6 +88,22 @@ import Foundation
 ///                 TestAccess.mapTable.setObject(value, forKey: "AccessKey_hasPaid2")
 ///             } else {
 ///                 TestAccess.mapTable.removeObject(forKey: "AccessKey_hasPaid2")
+///             }
+///         }
+///     }
+///
+///     var keychainValue: CodableStruct?
+///     {
+///         get {
+///             try? SwiftKeychain.search(key: "AccessKey_keychainValue")
+///         }
+///
+///         set {
+///             if let value = newValue {
+///                 SwiftKeychain.delete(key: "AccessKey_keychainValue")
+///                 try? SwiftKeychain.add(value: value, for: "AccessKey_keychainValue")
+///             } else {
+///                 SwiftKeychain.delete(key: "AccessKey_keychainValue")
 ///             }
 ///         }
 ///     }

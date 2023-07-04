@@ -153,4 +153,31 @@ final class AccessTests: XCTestCase {
             macros: testMacros
         )
     }
+
+    func testAccessKeychainMacro() {
+        assertMacroExpansion(
+            """
+            @Access<CodableStruct?>(.keychain)
+            var keychainValue: CodableStruct?
+            """,
+            expandedSource:
+            """
+
+            var keychainValue: CodableStruct? {
+                get {
+                    try? SwiftKeychain.search(key: "AccessKey_keychainValue")
+                }
+                set {
+                    if let value = newValue {
+                        SwiftKeychain.delete(key: "AccessKey_keychainValue")
+                        try? SwiftKeychain.add(value: value, for: "AccessKey_keychainValue")
+                    } else {
+                        SwiftKeychain.delete(key: "AccessKey_keychainValue")
+                    }
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
 }
