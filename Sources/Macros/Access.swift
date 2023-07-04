@@ -26,9 +26,40 @@ public struct Access: AccessorMacro {
                                                object: object,
                                                type: "\(dataType)",
                                                isOptionalType: isOptionalType)
+        } else if type == "keychain" {
+            return processKeychain(for: declaration)
         }
 
         return []
+    }
+
+    private static func processKeychain(for declaration: DeclSyntaxProtocol) -> [AccessorDeclSyntax] {
+        guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
+              let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
+              binding.accessor == nil else { return [] }
+        var defaultValue = ""
+        if let value = binding.initializer?.value {
+            defaultValue = " ?? \(value)"
+        }
+        let getAccessor: AccessorDeclSyntax =
+          """
+          get {
+              try? SwiftKeychain.search(key: "AccessKey_\(raw: identifier)")
+          }
+          """
+
+        let setAccessor: AccessorDeclSyntax =
+          """
+          set {
+              if let value = newValue {
+                  SwiftKeychain.delete(key: "AccessKey_\(raw: identifier)")
+                  try? SwiftKeychain.add(value: value, for: "AccessKey_\(raw: identifier)")
+              } else {
+                  SwiftKeychain.delete(key: "AccessKey_\(raw: identifier)")
+              }
+          }
+          """
+        return [getAccessor, setAccessor]
     }
 
     private static func processUserDefaults(for declaration: DeclSyntaxProtocol,
