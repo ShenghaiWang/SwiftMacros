@@ -1,6 +1,6 @@
 import Foundation
 
-/// An easy interface to retrieve value from or store value to ``AccessContentType`` like [UserDefault](https://developer.apple.com/documentation/foundation/userdefaults), [NSCache](https://developer.apple.com/documentation/foundation/nscache), [NSMAPTable](https://developer.apple.com/documentation/foundation/nsmaptable) and Keychain
+/// An easy interface to retrieve value from or store value to ``AccessContentType`` like [UserDefault](https://developer.apple.com/documentation/foundation/userdefaults), [NSCache](https://developer.apple.com/documentation/foundation/nscache), [NSMAPTable](https://developer.apple.com/documentation/foundation/nsmaptable) and [Keychain](https://github.com/ShenghaiWang/SwiftKeychain)
 ///
 /// - Parameters:
 ///   - type: One type of ``AccessContentType``.
