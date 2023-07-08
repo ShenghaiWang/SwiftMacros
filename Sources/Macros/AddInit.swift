@@ -55,19 +55,15 @@ public struct AddInit: MemberMacro {
         let identifier = (declaration as? StructDeclSyntax)?.identifier.text
         ?? (declaration as? ClassDeclSyntax)?.identifier.text
         ??  (declaration as? ActorDeclSyntax)?.identifier.text ?? ""
-        var parameters: [String] = []
-        declaration.memberBlock.members.forEach { member in
-            if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
+        let parameters = declaration.memberBlock.members.compactMap { member -> String? in
+            guard let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
                 .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
-               let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-               let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type {
-                var parameter = "\(identifier): "
-                if let mockValue = type.mockValue(randomValue: randomValue)
-                    ?? type.as(OptionalTypeSyntax.self)?.mockValue(randomValue: randomValue)  {
-                    parameter = "\(parameter)\(mockValue)"
-                }
-                parameters.append(parameter)
-            }
+                  let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+                  let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type else { return nil }
+            let mockValue = type.mockValue(randomValue: randomValue)
+            ?? type.as(OptionalTypeSyntax.self)?.mockValue(randomValue: randomValue)
+            ?? "nil"
+            return "\(identifier): \(mockValue)"
         }
         var varDelcaration: DeclSyntax = "static let mock = \(raw: identifier)(\(raw: parameters.joined(separator: ", ")))"
         if let modifiers = declaration.modifiers {

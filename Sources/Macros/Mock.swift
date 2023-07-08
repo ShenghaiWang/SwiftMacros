@@ -18,11 +18,10 @@ public struct Mock: PeerMacro {
 
         let randomValue = node.argument(for: "randomMockValue")?.as(BooleanLiteralExprSyntax.self)?
             .booleanLiteral.tokenKind.keyword != .false
-        var parameters: [String] = []
-        initializer.signature.input.parameterList.forEach { parameter in
+        let parameters = initializer.signature.input.parameterList.compactMap { parameter -> String in
             let name = parameter.firstName
             let mockValue = parameter.type.mockValue(randomValue: randomValue) ?? "nil"
-            parameters.append("\(name): \(mockValue)")
+            return "\(name): \(mockValue)"
         }
         var varDelcaration: DeclSyntax = "static let mock = \(raw: typeName)(\(raw: parameters.joined(separator: ", ")))"
         if let modifiers = initializer.modifiers {

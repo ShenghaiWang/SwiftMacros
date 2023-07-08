@@ -11,34 +11,30 @@ public struct AddAssociatedValueVariable: MemberMacro {
             .memberBlock.members.compactMap({ $0.decl.as(EnumCaseDeclSyntax.self)?.elements }) else {
             throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to an Enum type")
         }
-        var result: [DeclSyntax] = []
-
-        try members.forEach { list in
-            try list.forEach { element in
-                if let associatedValue = element.associatedValue {
-                    let typeValue: String
-                    if associatedValue.parameterList.isOneSimpleTypeIdentifierSyntax {
-                        typeValue = "\(associatedValue.parameterList.first ?? "")"
-                    } else {
-                        typeValue = "\(associatedValue)"
-                    }
-                    let varSyntax = try VariableDeclSyntax("\(declaration.modifiers ?? ModifierListSyntax())var \(element.identifier)Value: \(raw: typeValue)?") {
-                        try IfExprSyntax(
-                            "if case let .\(element.identifier)(\(raw: associatedValue.parameterList.toVariableNames)) = self",
-                               bodyBuilder: {
-                                   if associatedValue.parameterList.count == 1 {
-                                       StmtSyntax("return \(raw: associatedValue.parameterList.toVariableNames)")
-                                   } else {
-                                       StmtSyntax("return (\(raw: associatedValue.parameterList.toVariableNames))")
-                                   }
-                               })
-                        StmtSyntax(#"return nil"#)
-                    }
-                    result.append(DeclSyntax(varSyntax))
+        return try members.flatMap { list-> [DeclSyntax] in
+            try list.compactMap { element -> DeclSyntax? in
+                guard let associatedValue = element.associatedValue else { return nil }
+                let typeValue: String
+                if associatedValue.parameterList.isOneSimpleTypeIdentifierSyntax {
+                    typeValue = "\(associatedValue.parameterList.first ?? "")"
+                } else {
+                    typeValue = "\(associatedValue)"
                 }
+                let varSyntax = try VariableDeclSyntax("\(declaration.modifiers ?? ModifierListSyntax())var \(element.identifier)Value: \(raw: typeValue)?") {
+                    try IfExprSyntax(
+                        "if case let .\(element.identifier)(\(raw: associatedValue.parameterList.toVariableNames)) = self",
+                        bodyBuilder: {
+                            if associatedValue.parameterList.count == 1 {
+                                StmtSyntax("return \(raw: associatedValue.parameterList.toVariableNames)")
+                            } else {
+                                StmtSyntax("return (\(raw: associatedValue.parameterList.toVariableNames))")
+                            }
+                        })
+                    StmtSyntax(#"return nil"#)
+                }
+                return DeclSyntax(varSyntax)
             }
         }
-        return result
     }
 }
 
