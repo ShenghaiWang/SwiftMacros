@@ -23,43 +23,31 @@ public struct FormatDateComponents: ExpressionMacro {
         return ExprSyntax(function)
     }
 
-    private static func parseFromToFunction(for argumentList: TupleExprElementListSyntax,
+    private static func parseFromToFunction(for argumentList: LabeledExprListSyntax,
                                             from fromDate: ExprSyntax,
                                             to toDate: ExprSyntax) -> CodeBlockItemListSyntax {
         let formatter: DeclSyntax = "let formatter = DateComponentsFormatter()"
         let formatterStatement = CodeBlockItemSyntax(item: .decl(formatter))
-        var statementList = CodeBlockItemListSyntax(arrayLiteral: formatterStatement)
-        argumentList.dropFirst(2).forEach { tupleExprElementSyntax in
-            if let codeblock = codeblock(for: tupleExprElementSyntax) {
-                statementList = statementList.appending(codeblock)
-            }
-        }
-        let returnValue: ExprSyntax = "return formatter.string(from: \(fromDate), to: \(toDate))"
+        let arguments = argumentList.dropFirst(2).compactMap { codeblock(for: $0) }
+        let returnValue: ExprSyntax = "\n    return formatter.string(from: \(fromDate), to: \(toDate))"
         let returnblock = CodeBlockItemSyntax(item: .expr(returnValue))
-        statementList = statementList.appending(returnblock)
-        return statementList
+        return CodeBlockItemListSyntax([formatterStatement] + arguments + [returnblock])
     }
 
-    private static func parseFromFunction(for argumentList: TupleExprElementListSyntax,
+    private static func parseFromFunction(for argumentList: LabeledExprListSyntax,
                                                   from fromInterval: ExprSyntax) -> CodeBlockItemListSyntax {
         let formatter: DeclSyntax = "let formatter = DateComponentsFormatter()"
         let formatterStatement = CodeBlockItemSyntax(item: .decl(formatter))
-        var statementList = CodeBlockItemListSyntax(arrayLiteral: formatterStatement)
-        argumentList.dropFirst(1).forEach { tupleExprElementSyntax in
-            if let codeblock = codeblock(for: tupleExprElementSyntax) {
-                statementList = statementList.appending(codeblock)
-            }
-        }
-        let returnValue: ExprSyntax = "return formatter.string(from: \(fromInterval))"
+        let arguments = argumentList.dropFirst(1).compactMap { codeblock(for: $0) }
+        let returnValue: ExprSyntax = "\n    return formatter.string(from: \(fromInterval))"
         let returnblock = CodeBlockItemSyntax(item: .expr(returnValue))
-        statementList = statementList.appending(returnblock)
-        return statementList
+        return CodeBlockItemListSyntax([formatterStatement] + arguments + [returnblock])
     }
 
-    private static func codeblock(for tupleExprElementSyntax: TupleExprElementSyntax) -> CodeBlockItemSyntax? {
+    private static func codeblock(for tupleExprElementSyntax: LabeledExprSyntax) -> CodeBlockItemSyntax? {
         if let parameter = tupleExprElementSyntax.label?.text,
            !tupleExprElementSyntax.expression.is(NilLiteralExprSyntax.self) {
-            let stmt: StmtSyntax = "formatter.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
+            let stmt: StmtSyntax = "\n    formatter.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
             let codeblock = CodeBlockItemSyntax(item: .stmt(stmt))
             return codeblock
         }

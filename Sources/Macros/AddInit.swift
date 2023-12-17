@@ -14,15 +14,13 @@ public struct AddInit: MemberMacro {
         let (parameters, body) = initBodyAndParams(for: declaration)
         let bodyExpr: ExprSyntax = "\(raw: body.joined(separator: "\n"))"
         var parametersLiteral = "init(\(parameters.joined(separator: ", ")))"
-        if let modifiers = declaration.modifiers {
-            parametersLiteral = "\(modifiers)\(parametersLiteral)"
-        }
-        let initDecl = try InitializerDeclSyntax(PartialSyntaxNodeString(stringLiteral: parametersLiteral),
+        parametersLiteral = "\(declaration.modifiers)\(parametersLiteral)"
+        let initDecl = try InitializerDeclSyntax(SyntaxNodeString(stringLiteral: parametersLiteral),
                                                  bodyBuilder: { bodyExpr })
         var result = [DeclSyntax(initDecl)]
-        if node.argument(for: "withMock")?.as(BooleanLiteralExprSyntax.self)?.booleanLiteral.tokenKind.keyword == .true {
+        if node.argument(for: "withMock")?.as(BooleanLiteralExprSyntax.self)?.literal.tokenKind.keyword == .true {
             let randomValue = node.argument(for: "randomMockValue")?.as(BooleanLiteralExprSyntax.self)?
-                .booleanLiteral.tokenKind.keyword != .false
+                .literal.tokenKind.keyword != .false
             result.append(mock(basedOn: declaration, randomValue: randomValue))
         }
         return result
@@ -45,16 +43,16 @@ public struct AddInit: MemberMacro {
                     parameter += " = nil"
                 }
                 parameters.append(parameter)
-                body.append("self.\(identifier) = \(identifier)")
+                body.append("    self.\(identifier) = \(identifier)")
             }
         }
         return (params: parameters, body: body)
     }
 
     private static func mock(basedOn declaration: DeclGroupSyntax, randomValue: Bool) -> DeclSyntax {
-        let identifier = (declaration as? StructDeclSyntax)?.identifier.text
-        ?? (declaration as? ClassDeclSyntax)?.identifier.text
-        ??  (declaration as? ActorDeclSyntax)?.identifier.text ?? ""
+        let identifier = (declaration as? StructDeclSyntax)?.name.text
+        ?? (declaration as? ClassDeclSyntax)?.name.text
+        ??  (declaration as? ActorDeclSyntax)?.name.text ?? ""
         let parameters = declaration.memberBlock.members.compactMap { member -> String? in
             guard let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
                 .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
@@ -66,9 +64,7 @@ public struct AddInit: MemberMacro {
             return "\(identifier): \(mockValue)"
         }
         var varDelcaration: DeclSyntax = "static let mock = \(raw: identifier)(\(raw: parameters.joined(separator: ", ")))"
-        if let modifiers = declaration.modifiers {
-            varDelcaration = "\(modifiers)varDelcaration"
-        }
+        varDelcaration = "\(declaration.modifiers)\(varDelcaration)"
         varDelcaration = "#if DEBUG\n\(varDelcaration)\n#endif"
         return varDelcaration
     }
@@ -76,13 +72,13 @@ public struct AddInit: MemberMacro {
 
 extension AttributeSyntax {
     func argument(for label: String) -> ExprSyntax? {
-        argument?.as(TupleExprElementListSyntax.self)?.filter({ $0.label?.text == label }).first?.expression
+        arguments?.as(LabeledExprListSyntax.self)?.filter({ $0.label?.text == label }).first?.expression
     }
 }
 
-extension SimpleTypeIdentifierSyntax {
+extension IdentifierTypeSyntax {
     func mockValue(randomValue: Bool) -> String? {
-        guard let type = self.as(SimpleTypeIdentifierSyntax.self)?.name.text else { return nil }
+        guard let type = self.as(IdentifierTypeSyntax.self)?.name.text else { return nil }
         if let fun = mockFunctions[type] {
             return fun(randomValue)
         } else if name.text == "Void" {
@@ -107,30 +103,30 @@ extension OptionalTypeSyntax {
 
 extension FunctionTypeSyntax {
     func mockValue(randomValue: Bool) -> String? {
-        let args = repeatElement("_", count: max(arguments.count, 1)).joined(separator: ", ")
-        let returnValue = output.returnType.mockValue(randomValue: randomValue) ?? ""
+        let args = repeatElement("_", count: max(parameters.count, 1)).joined(separator: ", ")
+        let returnValue = returnClause.type.mockValue(randomValue: randomValue) ?? ""
         return "{ \(args) in return \(returnValue) }"
     }
 }
 
 extension TypeSyntax {
     func mockValue(randomValue: Bool) -> String? {
-        if let mockValue = self.as(SimpleTypeIdentifierSyntax.self)?.mockValue(randomValue: randomValue) {
+        if let mockValue = self.as(IdentifierTypeSyntax.self)?.mockValue(randomValue: randomValue) {
             return mockValue
         } else if let type = self.as(DictionaryTypeSyntax.self) {
-            let mockKeyValue = type.keyType.mockValue(randomValue: randomValue) ?? ""
-            let mockValueValue = type.valueType.mockValue(randomValue: randomValue) ?? "nil"
+            let mockKeyValue = type.key.mockValue(randomValue: randomValue) ?? ""
+            let mockValueValue = type.value.mockValue(randomValue: randomValue) ?? "nil"
             return "[\(mockKeyValue): \(mockValueValue)]"
         } else if let mockValue = self.as(FunctionTypeSyntax.self)?.mockValue(randomValue: randomValue) {
             return mockValue
         } else if let mockValue = self.as(TupleTypeSyntax.self)?.elements.first?.type
             .as(FunctionTypeSyntax.self)?.mockValue(randomValue: randomValue) {
             return mockValue
-        } else if let type = self.as(ArrayTypeSyntax.self)?.elementType {
+        } else if let type = self.as(ArrayTypeSyntax.self)?.element {
             return "[" + (type.mockValue(randomValue: randomValue) ?? "nil") + "]"
-        } else if let type = self.as(SimpleTypeIdentifierSyntax.self),
+        } else if let type = self.as(IdentifierTypeSyntax.self),
                   type.name.text == "Set",
-                  let genericType = type.genericArgumentClause?.arguments.first?.argumentType {
+                  let genericType = type.genericArgumentClause?.arguments.first?.argument {
             return "[" + (genericType.mockValue(randomValue: randomValue) ?? "nil") + "]"
         }
         return nil

@@ -13,18 +13,18 @@ public struct FormatDate: ExpressionMacro {
 
         let formatter: DeclSyntax = "let formatter = DateFormatter()"
         let formatterStatement = CodeBlockItemSyntax(item: .decl(formatter))
-        var statementList = CodeBlockItemListSyntax(arrayLiteral: formatterStatement)
-        node.argumentList.filter { $0.label != nil }.forEach { tupleExprElementSyntax in
-            if let parameter = tupleExprElementSyntax.label?.text,
-               !tupleExprElementSyntax.expression.is(NilLiteralExprSyntax.self) {
-                let stmt: StmtSyntax = "formatter.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
-                let codeblock = CodeBlockItemSyntax(item: .stmt(stmt))
-                statementList = statementList.appending(codeblock)
+        let arguments = node.argumentList.filter { $0.label != nil }
+            .compactMap { tupleExprElementSyntax in
+                if let parameter = tupleExprElementSyntax.label?.text,
+                   !tupleExprElementSyntax.expression.is(NilLiteralExprSyntax.self) {
+                    let stmt: StmtSyntax = "\n    formatter.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
+                    return CodeBlockItemSyntax(item: .stmt(stmt))
+                }
+                return nil
             }
-        }
-        let returnValue: ExprSyntax = "return formatter.string(from: \(date.expression))"
+        let returnValue: ExprSyntax = "\n    return formatter.string(from: \(date.expression))"
         let returnblock = CodeBlockItemSyntax(item: .expr(returnValue))
-        statementList = statementList.appending(returnblock)
+        let statementList = CodeBlockItemListSyntax([formatterStatement] + arguments + [returnblock])
         let closure = ClosureExprSyntax(statements: statementList)
         let function = FunctionCallExprSyntax(callee: closure)
         return ExprSyntax(function)

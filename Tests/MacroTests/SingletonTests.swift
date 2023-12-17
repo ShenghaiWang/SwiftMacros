@@ -12,15 +12,20 @@ final class SingletonTests: XCTestCase {
         assertMacroExpansion(
             """
             @Singleton
-            struct A {}
+            struct A {
+
+            }
             """,
             expandedSource:
             """
 
             struct A {
+
                 private init() {
                 }
+
                 static let shared = A()
+
             }
             """,
             macros: testMacros
@@ -31,15 +36,20 @@ final class SingletonTests: XCTestCase {
         assertMacroExpansion(
             """
             @Singleton
-            public struct A {}
+            public struct A {
+
+            }
             """,
             expandedSource:
             """
 
             public struct A {
+
                 private init() {
                 }
+
                 public static let shared = A()
+
             }
             """,
             macros: testMacros
@@ -55,8 +65,7 @@ final class SingletonTests: XCTestCase {
             expandedSource:
             """
 
-            enum A {
-            }
+            enum A {}
             """,
             diagnostics: [
                 DiagnosticSpec(message: "Can only be applied to a struct or class", line: 1, column: 1)
@@ -69,15 +78,20 @@ final class SingletonTests: XCTestCase {
         assertMacroExpansion(
             """
             @Singleton
-            class A: NSObject {}
+            class A: NSObject {
+
+            }
             """,
             expandedSource:
             """
 
             class A: NSObject {
+
                 private override init() {
                 }
+            
                 static let shared = A()
+
             }
             """,
             macros: testMacros

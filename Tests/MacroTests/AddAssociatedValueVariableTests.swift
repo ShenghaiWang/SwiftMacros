@@ -33,42 +33,49 @@ final class AddAssociatedValueVairiableTests: XCTestCase {
                 case fifth(a: String, Int)
                 case sixth(a: () -> Void)
                 case seventh(() -> Void)
+
                 var secondValue: Int? {
                     if case let .second(v0) = self {
                         return v0
                     }
                     return nil
                 }
+
                 var thirdValue: (String, Int)? {
                     if case let .third(v0, v1) = self {
                         return (v0, v1)
                     }
                     return nil
                 }
+
                 var third2Value: (String, Int)? {
                     if case let .third2(v0, v1) = self {
                         return (v0, v1)
                     }
                     return nil
                 }
+
                 var forthValue: (a: String, b: Int)? {
                     if case let .forth(v0, v1) = self {
                         return (v0, v1)
                     }
                     return nil
                 }
+
                 var fifthValue: (a: String, Int)? {
                     if case let .fifth(v0, v1) = self {
                         return (v0, v1)
                     }
                     return nil
                 }
+
                 var sixthValue: (a: () -> Void)? {
                     if case let .sixth(v0) = self {
                         return v0
                     }
                     return nil
                 }
+
                 var seventhValue: (() -> Void)? {
                     if case let .seventh(v0) = self {
                         return v0
@@ -96,6 +103,7 @@ final class AddAssociatedValueVairiableTests: XCTestCase {
             public enum A {
                 case first
                 case second(Int)
+            
                 public var secondValue: Int? {
                     if case let .second(v0) = self {
                         return v0

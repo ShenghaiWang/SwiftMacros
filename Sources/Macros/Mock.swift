@@ -16,17 +16,15 @@ public struct Mock: PeerMacro {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify type name")
         }
 
-        let randomValue = node.argument(for: "randomMockValue")?.as(BooleanLiteralExprSyntax.self)?
-            .booleanLiteral.tokenKind.keyword != .false
-        let parameters = initializer.signature.input.parameterList.compactMap { parameter -> String in
+        let randomValue = node.argument(for: "randomMockValue")?
+            .as(BooleanLiteralExprSyntax.self)?.literal.tokenKind.keyword != .false
+        let parameters = initializer.signature.parameterClause.parameters.compactMap { parameter -> String in
             let name = parameter.firstName
             let mockValue = parameter.type.mockValue(randomValue: randomValue) ?? "nil"
             return "\(name): \(mockValue)"
         }
         var varDelcaration: DeclSyntax = "static let mock = \(raw: typeName)(\(raw: parameters.joined(separator: ", ")))"
-        if let modifiers = initializer.modifiers {
-            varDelcaration = "\(modifiers)\(varDelcaration)"
-        }
+        varDelcaration = "\(initializer.modifiers)\(varDelcaration)"
         varDelcaration = "#if DEBUG\n\(varDelcaration)\n#endif"
         return [varDelcaration]
     }

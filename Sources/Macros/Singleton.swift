@@ -10,29 +10,29 @@ public struct Singleton: MemberMacro {
         guard [SwiftSyntax.SyntaxKind.classDecl, .structDecl].contains(declaration.kind) else {
             throw MacroDiagnostics.errorMacroUsage(message: "Can only be applied to a struct or class")
         }
-        let identifier = (declaration as? StructDeclSyntax)?.identifier ?? (declaration as? ClassDeclSyntax)?.identifier ?? ""
+        let identifier = (declaration as? StructDeclSyntax)?.name ?? (declaration as? ClassDeclSyntax)?.name ?? ""
         var override = ""
-        if let inheritedTypes = (declaration as? ClassDeclSyntax)?.inheritanceClause?.inheritedTypeCollection,
-           inheritedTypes.contains(where: { inherited in inherited.typeName.trimmedDescription == "NSObject" }) {
+        if let inheritedTypes = (declaration as? ClassDeclSyntax)?.inheritanceClause?.inheritedTypes,
+           inheritedTypes.contains(where: { inherited in inherited.type.trimmedDescription == "NSObject" }) {
             override = "override "
         }
 
         let initializer = try InitializerDeclSyntax("private \(raw: override)init()") {}
 
         let selfToken: TokenSyntax = "\(raw: identifier.text)()"
-        let initShared = FunctionCallExprSyntax(calledExpression: IdentifierExprSyntax(identifier: selfToken)) {}
+        let initShared = FunctionCallExprSyntax(calledExpression: DeclReferenceExprSyntax(baseName: selfToken)) {}
         let sharedInitializer = InitializerClauseSyntax(equal: .equalToken(trailingTrivia: .space),
                                                         value: initShared)
 
         let staticToken: TokenSyntax = "static"
         let staticModifier = DeclModifierSyntax(name: staticToken)
-        var modifiers = ModifierListSyntax([staticModifier])
+        var modifiers = DeclModifierListSyntax([staticModifier])
 
-        let isPublicACL = declaration.modifiers?.compactMap(\.name.tokenKind.keyword).contains(.public) ?? false
+        let isPublicACL = declaration.modifiers.compactMap(\.name.tokenKind.keyword).contains(.public) 
         if isPublicACL {
             let publicToken: TokenSyntax = "public"
             let publicModifier = DeclModifierSyntax(name: publicToken)
-            modifiers = modifiers.inserting(publicModifier, at: 0)
+            modifiers = DeclModifierListSyntax([publicModifier] + [staticModifier])
         }
 
         let shared = VariableDeclSyntax(modifiers: modifiers,

@@ -18,6 +18,7 @@ final class AddPublisherTests: XCTestCase {
             """
 
             private let subject = PassthroughSubject<Void, Never>()
+
             var subjectPublisher: AnyPublisher<Void, Never> {
                 subject.eraseToAnyPublisher()
             }
@@ -36,6 +37,7 @@ final class AddPublisherTests: XCTestCase {
             """
 
             private let subject = CurrentValueSubject<Void, Never>(())
+
             var subjectPublisher: AnyPublisher<Void, Never> {
                 subject.eraseToAnyPublisher()
             }
@@ -54,6 +56,7 @@ final class AddPublisherTests: XCTestCase {
             """
 
             private let subject: CurrentValueSubject<Void, Never> = .init(())
+            
             var subjectPublisher: AnyPublisher<Void, Never> {
                 subject.eraseToAnyPublisher()
             }

@@ -27,6 +27,7 @@ final class MockTests: XCTestCase {
                 init(a: Int) {
                     self.a = a
                 }
+            
                 #if DEBUG
                 static let mock = AStruct(a: 1)
                 #endif

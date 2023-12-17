@@ -13,21 +13,21 @@ public struct AddAssociatedValueVariable: MemberMacro {
         }
         return try members.flatMap { list-> [DeclSyntax] in
             try list.compactMap { element -> DeclSyntax? in
-                guard let associatedValue = element.associatedValue else { return nil }
+                guard let associatedValue = element.parameterClause else { return nil }
                 let typeValue: String
-                if associatedValue.parameterList.isOneSimpleTypeIdentifierSyntax {
-                    typeValue = "\(associatedValue.parameterList.first ?? "")"
+                if associatedValue.parameters.isOneSimpleTypeIdentifierSyntax {
+                    typeValue = "\(associatedValue.parameters.first ?? "")"
                 } else {
                     typeValue = "\(associatedValue)"
                 }
-                let varSyntax = try VariableDeclSyntax("\(declaration.modifiers ?? ModifierListSyntax())var \(element.identifier)Value: \(raw: typeValue)?") {
+                let varSyntax = try VariableDeclSyntax("\(declaration.modifiers )var \(element.name)Value: \(raw: typeValue)?") {
                     try IfExprSyntax(
-                        "if case let .\(element.identifier)(\(raw: associatedValue.parameterList.toVariableNames)) = self",
+                        "if case let .\(element.name)(\(raw: associatedValue.parameters.toVariableNames)) = self",
                         bodyBuilder: {
-                            if associatedValue.parameterList.count == 1 {
-                                StmtSyntax("return \(raw: associatedValue.parameterList.toVariableNames)")
+                            if associatedValue.parameters.count == 1 {
+                                StmtSyntax("return \(raw: associatedValue.parameters.toVariableNames)")
                             } else {
-                                StmtSyntax("return (\(raw: associatedValue.parameterList.toVariableNames))")
+                                StmtSyntax("return (\(raw: associatedValue.parameters.toVariableNames))")
                             }
                         })
                     StmtSyntax(#"return nil"#)
@@ -44,6 +44,6 @@ extension EnumCaseParameterListSyntax {
     }
 
     var isOneSimpleTypeIdentifierSyntax: Bool {
-        count == 1 && (first?.type.is(SimpleTypeIdentifierSyntax.self) ?? false)
+        count == 1 && (first?.type.is(IdentifierTypeSyntax.self) ?? false)
     }
 }

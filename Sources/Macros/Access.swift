@@ -125,34 +125,34 @@ public struct Access: AccessorMacro {
     }
 }
 
-private extension TupleExprElementSyntax {
+private extension LabeledExprSyntax {
     var type: String? {
-        expression.as(MemberAccessExprSyntax.self)?.name.text
-        ?? expression.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self)?.name.text
+        expression.as(MemberAccessExprSyntax.self)?.declName.baseName.text
+        ?? expression.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self)?.declName.baseName.text
     }
 }
 
-private extension TupleExprElementSyntax {
+private extension LabeledExprSyntax {
     var userDefaults: ExprSyntax {
         if expression.is(MemberAccessExprSyntax.self) {
             return "UserDefaults.standard"
         }
-        if let memeberAceess = expression.as(FunctionCallExprSyntax.self)?.argumentList.first?
-            .as(TupleExprElementSyntax.self)?.expression.as(MemberAccessExprSyntax.self) {
-            return "UserDefaults.\(raw: memeberAceess.name.text)"
+        if let memeberAceess = expression.as(FunctionCallExprSyntax.self)?.arguments.first?
+            .as(LabeledExprSyntax.self)?.expression.as(MemberAccessExprSyntax.self) {
+            return "UserDefaults.\(raw: memeberAceess.declName.baseName.text)"
         } else {
-            return expression.as(FunctionCallExprSyntax.self)?.argumentList.first?.expression ?? "UserDefaults.standard"
+            return expression.as(FunctionCallExprSyntax.self)?.arguments.first?.expression ?? "UserDefaults.standard"
         }
     }
 
     var object: ExprSyntax? {
-        expression.as(FunctionCallExprSyntax.self)?.argumentList.first?.as(TupleExprElementSyntax.self)?.expression
+        expression.as(FunctionCallExprSyntax.self)?.arguments.first?.as(LabeledExprSyntax.self)?.expression
     }
 }
 
-private extension SimpleTypeIdentifierSyntax {
+private extension IdentifierTypeSyntax {
     var type: SyntaxProtocol? {
-        genericArgumentClause?.arguments.first?.as(GenericArgumentSyntax.self)?.argumentType.as(OptionalTypeSyntax.self)?.wrappedType
+        genericArgumentClause?.arguments.first?.as(GenericArgumentSyntax.self)?.argument.as(OptionalTypeSyntax.self)?.wrappedType
         ?? genericArgumentClause?.arguments.first?.as(GenericArgumentSyntax.self)
     }
 }

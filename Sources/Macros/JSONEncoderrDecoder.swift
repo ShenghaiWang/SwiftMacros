@@ -20,18 +20,18 @@ public struct Encode: ExpressionMacro {
         }
         let encoder: DeclSyntax = "let encoder = JSONEncoder()"
         let encoderStatement = CodeBlockItemSyntax(item: .decl(encoder))
-        var statementList = CodeBlockItemListSyntax(arrayLiteral: encoderStatement)
-        node.argumentList.filter { $0.label != nil }.forEach { tupleExprElementSyntax in
-            if let parameter = tupleExprElementSyntax.label?.text,
-               defaults[parameter] != "\(tupleExprElementSyntax.expression)" {
-                let stmt: StmtSyntax = "encoder.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
-                let codeblock = CodeBlockItemSyntax(item: .stmt(stmt))
-                statementList = statementList.appending(codeblock)
+        let arguments = node.argumentList.filter { $0.label != nil }
+            .compactMap { tupleExprElementSyntax in
+                if let parameter = tupleExprElementSyntax.label?.text,
+                   defaults[parameter] != "\(tupleExprElementSyntax.expression)" {
+                    let stmt: StmtSyntax = "\n    encoder.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
+                    return CodeBlockItemSyntax(item: .stmt(stmt))
+                }
+                return nil
             }
-        }
-        let returnValue: ExprSyntax = "return try encoder.encode(\(value))"
+        let returnValue: ExprSyntax = "\n    return try encoder.encode(\(value))"
         let returnblock = CodeBlockItemSyntax(item: .expr(returnValue))
-        statementList = statementList.appending(returnblock)
+        let statementList = CodeBlockItemListSyntax([encoderStatement] + arguments + [returnblock])
         let closure = ClosureExprSyntax(statements: statementList)
         let function = FunctionCallExprSyntax(callee: closure)
         return ExprSyntax(function)
@@ -56,18 +56,19 @@ public struct Decode: ExpressionMacro {
         }
         let decoder: DeclSyntax = "let decoder = JSONDecoder()"
         let decoderStatement = CodeBlockItemSyntax(item: .decl(decoder))
-        var statementList = CodeBlockItemListSyntax(arrayLiteral: decoderStatement)
-        node.argumentList.filter { $0.label != nil && $0.label?.text != "from" }.forEach { tupleExprElementSyntax in
+        let arguments = node.argumentList
+            .filter { $0.label != nil && $0.label?.text != "from" }
+            .compactMap { tupleExprElementSyntax in
             if let parameter = tupleExprElementSyntax.label?.text,
                defaults[parameter] != "\(tupleExprElementSyntax.expression)" {
-                let stmt: StmtSyntax = "decoder.\(raw: tupleExprElementSyntax.label?.text ?? "") = \(tupleExprElementSyntax.expression)"
-                let codeblock = CodeBlockItemSyntax(item: .stmt(stmt))
-                statementList = statementList.appending(codeblock)
+                let stmt: StmtSyntax = "\n    decoder.\(raw: tupleExprElementSyntax.label?.text ?? "") = \(tupleExprElementSyntax.expression)"
+                return CodeBlockItemSyntax(item: .stmt(stmt))
             }
+            return nil
         }
-        let returnValue: ExprSyntax = "return try decoder.decode(\(type), from: \(data))"
+        let returnValue: ExprSyntax = "\n    return try decoder.decode(\(type), from: \(data))"
         let returnblock = CodeBlockItemSyntax(item: .expr(returnValue))
-        statementList = statementList.appending(returnblock)
+        let statementList = CodeBlockItemListSyntax([decoderStatement] + arguments + [returnblock])
         let closure = ClosureExprSyntax(statements: statementList)
         let function = FunctionCallExprSyntax(callee: closure)
         return ExprSyntax(function)
