@@ -24,6 +24,8 @@ A practical collection of Swift Macros that help code correctly and swiftly.
 |            |<pre>let url = #buildURL("http://google.com",<br>                   URLScheme.https,<br>                   URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")]))<br>let url2 = buildURL {<br>    "http://google.com"<br>    URLScheme.https<br>    URLQueryItems([.init(name: "q1", value: "q1v"), .init(name: "q2", value: "q2v")])<br>}</pre>|
 | #buildURLRequest    |Build a URLRequest from components.<br>This solution addes in a resultBulder `URLRequestBuilder`, which can be used directly if prefer builder pattern. |
 |            |<pre>let urlrequest = #buildURLRequest(url!, RequestTimeOutInterval(100))<br>let urlRequest2 = buildURLRequest {<br>    url!<br>    RequestTimeOutInterval(100)<br>}</pre>|
+| @ConformToEquatable|Add Equtable conformance to a class type<br>Use it caution per https://github.com/apple/swift-evolution/blob/main/proposals/0185-synthesize-equatable-hashable.md#synthesis-for-class-types-and-tuples|
+|            |<pre>@AddInit<br>@ConformToEquatable<br>class AClass {<br>    let a: Int?<br>    let b: () -> Void<br>}</pre>|
 | #encode    |Encode an Encodable to data using JSONEncoder |
 |            |<pre>#encode(value)</pre>|
 | #decode    |Decode a Decodable to a typed value using JSONDecoder  |

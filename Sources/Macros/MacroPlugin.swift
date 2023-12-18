@@ -19,5 +19,6 @@ struct MacroPlugin: CompilerPlugin {
         Mock.self,
         PostNotification.self,
         Singleton.self,
+        ConformToEquatable.self
     ]
 }

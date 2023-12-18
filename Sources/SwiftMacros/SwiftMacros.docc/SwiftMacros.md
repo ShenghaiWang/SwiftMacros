@@ -32,4 +32,5 @@ This collection of Swift Macros aims to remove boilerplate code by automatically
 - ``Mock(type:randomMockValue:)``
 - ``postNotification(_:object:userInfo:from:)``
 - ``Singleton``
+- ``ConformToEqutable``
 

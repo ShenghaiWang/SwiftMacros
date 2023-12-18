@@ -592,3 +592,28 @@ public macro postNotification(_ name: NSNotification.Name,
 /// ```
 @attached(member, names: named(init), named(shared))
 public macro Singleton() = #externalMacro(module: "Macros", type: "Singleton")
+
+/// Add Equatable conformance to class
+///
+/// For example:
+/// ```swift
+/// @ConformToEqutable
+/// class A {
+///     let a: Int
+///     init(a: Int) {
+///         self.a = a
+///     }
+/// }
+/// ```
+/// will expand to
+/// ```swift
+/// class A: Equtable {
+///     let a: Int
+///     init(a: Int) {
+///         self.a = a
+///     }
+///     
+/// }
+/// ```
+@attached(extension, conformances: Equatable, names: named(==))
+public macro ConformToEquatable() = #externalMacro(module: "Macros", type: "ConformToEquatable")

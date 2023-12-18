@@ -146,3 +146,11 @@ struct TestAccess {
     @Access<TestStruct?>(.keychain)
     var keychainValue: TestStruct?
 }
+
+
+@AddInit
+@ConformToEquatable
+class AClass {
+    let a: Int?
+    let b: () -> Void
+}
