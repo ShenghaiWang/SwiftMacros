@@ -147,9 +147,9 @@ struct TestAccess {
     var keychainValue: TestStruct?
 }
 
-
 @AddInit
 @ConformToEquatable
+@ConformToHashable
 class AClass {
     let a: Int?
     let b: () -> Void

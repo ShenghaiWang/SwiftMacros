@@ -607,13 +607,48 @@ public macro Singleton() = #externalMacro(module: "Macros", type: "Singleton")
 /// ```
 /// will expand to
 /// ```swift
-/// class A: Equtable {
+/// class A {
 ///     let a: Int
 ///     init(a: Int) {
 ///         self.a = a
 ///     }
-///     
+/// }
+///
+/// extension A: Equatable {
+///     static func == (lhs: A, rhs: A) -> Bool {
+///         lhs.a == rhs.a
+///     }
 /// }
 /// ```
 @attached(extension, conformances: Equatable, names: named(==))
 public macro ConformToEquatable() = #externalMacro(module: "Macros", type: "ConformToEquatable")
+
+/// Add Hashable conformance to class
+///
+/// For example:
+/// ```swift
+/// @ConformToHashable
+/// class A {
+///     let a: Int
+///     init(a: Int) {
+///         self.a = a
+///     }
+/// }
+/// ```
+/// will expand to
+/// ```swift
+/// class A {
+///     let a: Int
+///     init(a: Int) {
+///         self.a = a
+///     }
+/// }
+///
+/// extension A: Hashable {
+///     func hash(into hasher: inout Hasher) {
+///         hasher.combine(a)
+///     }
+/// }
+/// ```
+@attached(extension, conformances: Hashable, names: named(hash))
+public macro ConformToHashable() = #externalMacro(module: "Macros", type: "ConformToHashable")

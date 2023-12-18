@@ -22,6 +22,8 @@ This collection of Swift Macros aims to remove boilerplate code by automatically
 - ``buildDate(_:)``
 - ``buildURL(_:)``
 - ``buildURLRequest(_:)``
+- ``ConformToEqutable``
+- ``ConformToHashable``
 - ``encode(_:outputFormatting:dateEncodingStrategy:dataEncodingStrategy:nonConformingFloatEncodingStrategy:keyEncodingStrategy:userInfo:)``
 - ``decode(_:from:dateDecodingStrategy:dataDecodingStrategy:nonConformingFloatDecodingStrategy:keyDecodingStrategy:userInfo:allowsJSON5:assumesTopLevelDictionary:)``
 - ``formatDate(_:dateStyle:timeStyle:formattingContext:formatterBehavior:doesRelativeDateFormatting:amSymbol:pmSymbol:weekdaySymbols:shortWeekdaySymbols:veryShortWeekdaySymbols:standaloneWeekdaySymbols:shortStandaloneWeekdaySymbols:veryShortStandaloneWeekdaySymbols:monthSymbols:shortMonthSymbols:veryShortMonthSymbols:standaloneMonthSymbols:shortStandaloneMonthSymbols:veryShortStandaloneMonthSymbols:quarterSymbols:shortQuarterSymbols:standaloneQuarterSymbols:shortStandaloneQuarterSymbols:eraSymbols:longEraSymbols:)``
@@ -32,5 +34,4 @@ This collection of Swift Macros aims to remove boilerplate code by automatically
 - ``Mock(type:randomMockValue:)``
 - ``postNotification(_:object:userInfo:from:)``
 - ``Singleton``
-- ``ConformToEqutable``
 
