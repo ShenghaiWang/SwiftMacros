@@ -34,6 +34,35 @@ final class AddInitTests: XCTestCase {
         )
     }
 
+    func testAddInitWithComputedPropertyMacro() {
+        assertMacroExpansion(
+            """
+            @AddInit
+            struct A {
+                let a: Int?
+                var b: Int {
+                    0
+                }
+            }
+            """,
+            expandedSource:
+            """
+
+            struct A {
+                let a: Int?
+                var b: Int {
+                    0
+                }
+
+                init(a: Int? = nil) {
+                    self.a = a
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
     func testAddPublicInitMacro() {
         assertMacroExpansion(
             """

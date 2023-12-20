@@ -33,7 +33,8 @@ public struct AddInit: MemberMacro {
             if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
                 .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
                let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-               let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type {
+               let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type,
+               patternBinding.accessorBlock == nil {
                 var parameter = "\(identifier): "
                 if type.is(FunctionTypeSyntax.self) {
                     parameter += "@escaping "
@@ -57,7 +58,8 @@ public struct AddInit: MemberMacro {
             guard let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
                 .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
                   let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-                  let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type else { return nil }
+                  let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type,
+                  patternBinding.accessorBlock == nil else { return nil }
             let mockValue = type.mockValue(randomValue: randomValue)
             ?? type.as(OptionalTypeSyntax.self)?.mockValue(randomValue: randomValue)
             ?? "nil"
