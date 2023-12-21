@@ -35,6 +35,7 @@ final class ConformToHashableTests: XCTestCase {
             extension AClass: Hashable {
                 func hash(into hasher: inout Hasher) {
                     hasher.combine(a)
+                    hasher.combine(b)
                 }
             }
             """,

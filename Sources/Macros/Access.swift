@@ -8,20 +8,20 @@ public struct Access: AccessorMacro {
                                  Declaration: DeclSyntaxProtocol>(of node: AttributeSyntax,
                                                                   providingAccessorsOf declaration: Declaration,
                                                                   in context: Context) throws -> [AccessorDeclSyntax] {
-        guard let firstArg = node.argument?.as(TupleExprElementListSyntax.self)?.first,
+        guard let firstArg = node.arguments?.as(LabeledExprListSyntax.self)?.first,
               let type = firstArg.type else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify a content type")
         }
         if type == "userDefaults",
-           let dataType = node.attributeName.as(SimpleTypeIdentifierSyntax.self)?.type {
+           let dataType = node.attributeName.as(IdentifierTypeSyntax.self)?.type {
             return processUserDefaults(for: declaration,
                                        userDefaults: firstArg.userDefaults,
                                        type: "\(dataType)")
         } else if ["nsCache", "nsMapTable"].contains(type),
                   let object = firstArg.object,
-                  let dataType = node.attributeName.as(SimpleTypeIdentifierSyntax.self)?.type {
-            let isOptionalType = node.attributeName.as(SimpleTypeIdentifierSyntax.self)?.genericArgumentClause?.arguments
-                .first?.as(GenericArgumentSyntax.self)?.argumentType.is(OptionalTypeSyntax.self) ?? false
+                  let dataType = node.attributeName.as(IdentifierTypeSyntax.self)?.type {
+            let isOptionalType = node.attributeName.as(IdentifierTypeSyntax.self)?.genericArgumentClause?.arguments
+                .first?.as(GenericArgumentSyntax.self)?.argument.is(OptionalTypeSyntax.self) ?? false
             return processNSCacheAndNSMapTable(for: declaration,
                                                object: object,
                                                type: "\(dataType)",
@@ -36,7 +36,7 @@ public struct Access: AccessorMacro {
     private static func processKeychain(for declaration: DeclSyntaxProtocol) -> [AccessorDeclSyntax] {
         guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
               let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
-              binding.accessor == nil else { return [] }
+              binding.accessorBlock == nil else { return [] }
         let getAccessor: AccessorDeclSyntax =
           """
           get {
@@ -63,7 +63,7 @@ public struct Access: AccessorMacro {
                                             type: String) -> [AccessorDeclSyntax] {
         guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
               let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
-              binding.accessor == nil else { return [] }
+              binding.accessorBlock == nil else { return [] }
         var defaultValue = ""
         if let value = binding.initializer?.value {
             defaultValue = " ?? \(value)"
@@ -90,7 +90,7 @@ public struct Access: AccessorMacro {
                                                     isOptionalType: Bool) -> [AccessorDeclSyntax] {
         guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
               let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
-              binding.accessor == nil else { return [] }
+              binding.accessorBlock == nil else { return [] }
         var defaultValue = ""
         if let value = binding.initializer?.value {
             defaultValue = " ?? \(value)"
