@@ -14,7 +14,7 @@ public struct FormatDateInterval: ExpressionMacro {
 
         let formatter: DeclSyntax = "let formatter = DateIntervalFormatter()"
         let formatterStatement = CodeBlockItemSyntax(item: .decl(formatter))
-        let arguments = node.argumentList.dropFirst(2).compactMap { tupleExprElementSyntax in
+        let arguments = node.arguments.dropFirst(2).compactMap { tupleExprElementSyntax in
             if let parameter = tupleExprElementSyntax.label?.text,
                !tupleExprElementSyntax.expression.is(NilLiteralExprSyntax.self) {
                 let stmt: StmtSyntax = "\n    formatter.\(raw: parameter) = \(tupleExprElementSyntax.expression)"
@@ -33,6 +33,6 @@ public struct FormatDateInterval: ExpressionMacro {
 
 extension FreestandingMacroExpansionSyntax {
     func argument(for label: String) -> ExprSyntax? {
-        argumentList.as(LabeledExprListSyntax.self)?.filter({ $0.label?.text == label }).first?.expression
+        arguments.filter({ $0.label?.text == label }).first?.expression
     }
 }

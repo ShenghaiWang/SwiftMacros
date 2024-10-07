@@ -7,11 +7,11 @@ public struct BuildURL: ExpressionMacro {
     public static func expansion<Node: FreestandingMacroExpansionSyntax,
                                  Context: MacroExpansionContext>(of node: Node,
                                                                  in context: Context) throws -> ExprSyntax {
-        guard node.argumentList.count > 0 else {
+        guard node.arguments.count > 0 else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify arguments")
         }
 
-        let arguments = node.argumentList.map {
+        let arguments = node.arguments.map {
             "\($0.expression)".trimmingCharacters(in: .whitespacesAndNewlines)
         }
 

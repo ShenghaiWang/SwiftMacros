@@ -21,7 +21,7 @@ public struct Access: AccessorMacro {
                   let object = firstArg.object,
                   let dataType = node.attributeName.as(IdentifierTypeSyntax.self)?.type {
             let isOptionalType = node.attributeName.as(IdentifierTypeSyntax.self)?.genericArgumentClause?.arguments
-                .first?.as(GenericArgumentSyntax.self)?.argument.is(OptionalTypeSyntax.self) ?? false
+                .first?.argument.is(OptionalTypeSyntax.self) ?? false
             return processNSCacheAndNSMapTable(for: declaration,
                                                object: object,
                                                type: "\(dataType)",
@@ -137,8 +137,7 @@ private extension LabeledExprSyntax {
         if expression.is(MemberAccessExprSyntax.self) {
             return "UserDefaults.standard"
         }
-        if let memeberAceess = expression.as(FunctionCallExprSyntax.self)?.arguments.first?
-            .as(LabeledExprSyntax.self)?.expression.as(MemberAccessExprSyntax.self) {
+        if let memeberAceess = expression.as(FunctionCallExprSyntax.self)?.arguments.first?.expression.as(MemberAccessExprSyntax.self) {
             return "UserDefaults.\(raw: memeberAceess.declName.baseName.text)"
         } else {
             return expression.as(FunctionCallExprSyntax.self)?.arguments.first?.expression ?? "UserDefaults.standard"
@@ -146,13 +145,13 @@ private extension LabeledExprSyntax {
     }
 
     var object: ExprSyntax? {
-        expression.as(FunctionCallExprSyntax.self)?.arguments.first?.as(LabeledExprSyntax.self)?.expression
+        expression.as(FunctionCallExprSyntax.self)?.arguments.first?.expression
     }
 }
 
 private extension IdentifierTypeSyntax {
     var type: SyntaxProtocol? {
-        genericArgumentClause?.arguments.first?.as(GenericArgumentSyntax.self)?.argument.as(OptionalTypeSyntax.self)?.wrappedType
-        ?? genericArgumentClause?.arguments.first?.as(GenericArgumentSyntax.self)
+        genericArgumentClause?.arguments.first?.argument.as(OptionalTypeSyntax.self)?.wrappedType
+        ?? genericArgumentClause?.arguments.first
     }
 }

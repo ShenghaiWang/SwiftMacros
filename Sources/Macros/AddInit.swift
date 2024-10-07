@@ -30,10 +30,9 @@ public struct AddInit: MemberMacro {
         var parameters: [String] = []
         var body: [String] = []
         declaration.memberBlock.members.forEach { member in
-            if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
-                .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
+            if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings.first,
                let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-               let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type,
+               let type =  patternBinding.typeAnnotation?.type,
                patternBinding.accessorBlock == nil {
                 var parameter = "\(identifier): "
                 if type.is(FunctionTypeSyntax.self) {
@@ -55,10 +54,9 @@ public struct AddInit: MemberMacro {
         ?? (declaration as? ClassDeclSyntax)?.name.text
         ??  (declaration as? ActorDeclSyntax)?.name.text ?? ""
         let parameters = declaration.memberBlock.members.compactMap { member -> String? in
-            guard let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
-                .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
+            guard let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings.first,
                   let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-                  let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type,
+                  let type =  patternBinding.typeAnnotation?.type,
                   patternBinding.accessorBlock == nil else { return nil }
             let mockValue = type.mockValue(randomValue: randomValue)
             ?? type.as(OptionalTypeSyntax.self)?.mockValue(randomValue: randomValue)
@@ -80,7 +78,30 @@ extension AttributeSyntax {
 
 extension IdentifierTypeSyntax {
     func mockValue(randomValue: Bool) -> String? {
-        guard let type = self.as(IdentifierTypeSyntax.self)?.name.text else { return nil }
+        let mockFunctions: [String: @Sendable (Bool) -> String] = {
+            let common = [
+                "Int": Int.mock(random:),
+                "Int8": Int8.mock(random:),
+                "Int32": Int32.mock(random:),
+                "Int64": Int64.mock(random:),
+                "UInt": UInt.mock(random:),
+                "UInt32": UInt32.mock(random:),
+                "UInt64": UInt64.mock(random:),
+                "UInt8": UInt8.mock(random:),
+                "Bool": Bool.mock(random:),
+                "String": String.mock(random:),
+                "Double": Double.mock(random:),
+                "Float": Float.mock(random:),
+                "Character": Character.mock(random:),
+                "CharacterSet": CharacterSet.mock(random:),
+            ]
+            if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
+                return common.merging(["Image": Image.mock(random:)]) { first, _ in first }
+            } else {
+                return common
+            }
+        }()
+        let type = self.name.text
         if let fun = mockFunctions[type] {
             return fun(randomValue)
         } else if name.text == "Void" {

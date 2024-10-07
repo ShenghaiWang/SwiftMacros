@@ -106,27 +106,3 @@ extension CharacterSet: Mockable {
         "[]"
     }
 }
-
-public var mockFunctions: [String: (Bool) -> String] = {
-    let common = [
-        "Int": Int.mock(random:),
-        "Int8": Int8.mock(random:),
-        "Int32": Int32.mock(random:),
-        "Int64": Int64.mock(random:),
-        "UInt": UInt.mock(random:),
-        "UInt32": UInt32.mock(random:),
-        "UInt64": UInt64.mock(random:),
-        "UInt8": UInt8.mock(random:),
-        "Bool": Bool.mock(random:),
-        "String": String.mock(random:),
-        "Double": Double.mock(random:),
-        "Float": Float.mock(random:),
-        "Character": Character.mock(random:),
-        "CharacterSet": CharacterSet.mock(random:),
-    ]
-    if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
-        return common.merging(["Image": Image.mock(random:)]) { first, _ in first }
-    } else {
-        return common
-    }
-}()

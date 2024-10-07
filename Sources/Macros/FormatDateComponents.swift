@@ -10,11 +10,11 @@ public struct FormatDateComponents: ExpressionMacro {
         let statementList: CodeBlockItemListSyntax
         if let fromDate = node.argument(for: "from"),
            let toDate = node.argument(for: "to") {
-            statementList = parseFromToFunction(for: node.argumentList, from: fromDate, to: toDate)
+            statementList = parseFromToFunction(for: node.arguments, from: fromDate, to: toDate)
         } else if let fromInterval = node.argument(for: "fromInterval") {
-            statementList = parseFromFunction(for: node.argumentList, from: fromInterval)
+            statementList = parseFromFunction(for: node.arguments, from: fromInterval)
         } else if let fromComponents = node.argument(for: "fromComponents") {
-            statementList = parseFromFunction(for: node.argumentList, from: fromComponents)
+            statementList = parseFromFunction(for: node.arguments, from: fromComponents)
         } else {
             throw MacroDiagnostics.errorMacroUsage(message: "Not supported parameters")
         }

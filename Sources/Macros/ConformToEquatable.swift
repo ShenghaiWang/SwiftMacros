@@ -17,10 +17,9 @@ public struct ConformToEquatable: ExtensionMacro {
         )
 
         let mambers = declaration.memberBlock.members.compactMap { member in
-            if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings
-                .as(PatternBindingListSyntax.self)?.first?.as(PatternBindingSyntax.self),
+            if let patternBinding = member.decl.as(VariableDeclSyntax.self)?.bindings.first,
                let identifier = patternBinding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-               let type =  patternBinding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type {
+               let type =  patternBinding.typeAnnotation?.type {
                 if type.is(IdentifierTypeSyntax.self) {
                     return "lhs.\(identifier) == rhs.\(identifier)"
                 }
