@@ -7,13 +7,13 @@ public struct FormatDate: ExpressionMacro {
     public static func expansion<Node: FreestandingMacroExpansionSyntax,
                                  Context: MacroExpansionContext>(of node: Node,
                                                                  in context: Context) throws -> ExprSyntax {
-        guard let date = node.argumentList.first else {
+        guard let date = node.arguments.first else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify arguments")
         }
 
         let formatter: DeclSyntax = "let formatter = DateFormatter()"
         let formatterStatement = CodeBlockItemSyntax(item: .decl(formatter))
-        let arguments = node.argumentList.filter { $0.label != nil }
+        let arguments = node.arguments.filter { $0.label != nil }
             .compactMap { tupleExprElementSyntax in
                 if let parameter = tupleExprElementSyntax.label?.text,
                    !tupleExprElementSyntax.expression.is(NilLiteralExprSyntax.self) {

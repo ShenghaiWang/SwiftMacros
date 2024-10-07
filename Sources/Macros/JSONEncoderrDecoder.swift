@@ -15,12 +15,12 @@ public struct Encode: ExpressionMacro {
             "keyEncodingStrategy": "useDefaultKeys",
             "userInfo": "[:]"]
 
-        guard let value = node.argumentList.first(where: { $0.label == nil })?.expression else {
+        guard let value = node.arguments.first(where: { $0.label == nil })?.expression else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify the value to encode")
         }
         let encoder: DeclSyntax = "let encoder = JSONEncoder()"
         let encoderStatement = CodeBlockItemSyntax(item: .decl(encoder))
-        let arguments = node.argumentList.filter { $0.label != nil }
+        let arguments = node.arguments.filter { $0.label != nil }
             .compactMap { tupleExprElementSyntax in
                 if let parameter = tupleExprElementSyntax.label?.text,
                    defaults[parameter] != "\(tupleExprElementSyntax.expression)" {
@@ -50,13 +50,13 @@ public struct Decode: ExpressionMacro {
             "userInfo": "[:]",
             "allowsJSON5": "false",
             "assumesTopLevelDictionary": "false"]
-        guard let type = node.argumentList.first(where: { $0.label == nil })?.expression,
-              let data = node.argumentList.first(where: { $0.label?.text == "from" })?.expression else {
+        guard let type = node.arguments.first(where: { $0.label == nil })?.expression,
+              let data = node.arguments.first(where: { $0.label?.text == "from" })?.expression else {
             throw MacroDiagnostics.errorMacroUsage(message: "Must specify the type and the value to decode")
         }
         let decoder: DeclSyntax = "let decoder = JSONDecoder()"
         let decoderStatement = CodeBlockItemSyntax(item: .decl(decoder))
-        let arguments = node.argumentList
+        let arguments = node.arguments
             .filter { $0.label != nil && $0.label?.text != "from" }
             .compactMap { tupleExprElementSyntax in
             if let parameter = tupleExprElementSyntax.label?.text,

@@ -9,11 +9,13 @@ struct TestSingletonMacro {
     let name = "Tim Wang"
 }
 
+@MainActor
 @Singleton
 public struct TestPublicSingletonMacro {
     let name = "Tim Wang"
 }
 
+@MainActor
 @Singleton
 class TestPublicSingletonNSOjbectMacro: NSObject {
     let name = "Tim Wang"
@@ -94,16 +96,18 @@ let urlRequest2 = buildURLRequest {
     RequestTimeOutInterval(100)
 }
 
-class AStruct {
+@MainActor
+class AClassForMock {
     let a: Float
-    @Mock(type: AStruct.self)
+    @Mock(type: AClassForMock.self)
     init(a: Float) {
         self.a = a
     }
 }
 
+@MainActor
 @AddInit(withMock: true)
-class BStruct {
+class BClassForMock {
     let a: Float
     let b: CStruct
 }
@@ -111,8 +115,8 @@ class BStruct {
 struct CStruct {
     static let mock = CStruct()
 }
-print(AStruct.mock.a)
-print(BStruct.mock.a)
+print(AClassForMock.mock.a)
+print(BClassForMock.mock.a)
 
 let date = #buildDate(DateString("03/05/2003", dateFormat: "MM/dd/yyyy"),
                       Date(),
@@ -124,6 +128,7 @@ let string = #formatDate(Date(), dateStyle: .full)
 let intervalString = #formatDateInterval(from: Date(), to: Date(timeIntervalSinceNow: 200))
 let componentsString = #formatDateComponents(from: Date(), to: Date(timeIntervalSinceNow: 200), allowedUnits: [.day, .hour, .minute, .second])
 
+@MainActor
 struct TestAccess {
     static let cache = NSCache<NSString, AnyObject>()
     static let mapTable = NSMapTable<NSString, AnyObject>(keyOptions: .copyIn, valueOptions: .weakMemory)

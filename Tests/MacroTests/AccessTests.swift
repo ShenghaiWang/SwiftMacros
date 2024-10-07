@@ -12,7 +12,7 @@ final class AccessTests: XCTestCase {
         assertMacroExpansion(
             """
             @Access<Bool?>(.userDefaults)
-            var isPaidUser1 = false
+            var isPaidUser1: Bool = false
             @Access<Bool?>(.userDefaults)
             var isPaidUser2: Bool = false
             @Access<Bool?>(.userDefaults)
@@ -21,7 +21,7 @@ final class AccessTests: XCTestCase {
             expandedSource:
             """
             
-            var isPaidUser1 = false {
+            var isPaidUser1: Bool {
                 get {
                     (UserDefaults.standard.object(forKey: "AccessKey_isPaidUser1") as? Bool) ?? false
                 }
@@ -29,7 +29,7 @@ final class AccessTests: XCTestCase {
                     UserDefaults.standard.set(newValue, forKey: "AccessKey_isPaidUser1")
                 }
             }
-            var isPaidUser2: Bool = false {
+            var isPaidUser2: Bool {
                 get {
                     (UserDefaults.standard.object(forKey: "AccessKey_isPaidUser2") as? Bool) ?? false
                 }
@@ -54,14 +54,14 @@ final class AccessTests: XCTestCase {
         assertMacroExpansion(
             """
             @Access<Bool>(.userDefaults(.standard))
-            var isPaidUser1 = false
+            var isPaidUser1: Bool = false
             @Access<Bool>(.userDefaults(UserDefaults()))
-            var isPaidUser2 = false
+            var isPaidUser2: Bool = false
             """,
             expandedSource:
             """
 
-            var isPaidUser1 = false {
+            var isPaidUser1: Bool {
                 get {
                     (UserDefaults.standard.object(forKey: "AccessKey_isPaidUser1") as? Bool) ?? false
                 }
@@ -69,7 +69,7 @@ final class AccessTests: XCTestCase {
                     UserDefaults.standard.set(newValue, forKey: "AccessKey_isPaidUser1")
                 }
             }
-            var isPaidUser2 = false {
+            var isPaidUser2: Bool {
                 get {
                     (UserDefaults().object(forKey: "AccessKey_isPaidUser2") as? Bool) ?? false
                 }
@@ -86,14 +86,14 @@ final class AccessTests: XCTestCase {
         assertMacroExpansion(
             """
             @Access<NSObject>(.nsCache(cache))
-            var isPaidUser1 = NSObject()
+            var isPaidUser1: NSObject = NSObject()
             @Access<NSObject?>(.nsCache(cache))
             var isPaidUser2: NSObject?
             """,
             expandedSource:
             """
 
-            var isPaidUser1 = NSObject() {
+            var isPaidUser1: NSObject {
                 get {
                     (cache.object(forKey: "AccessKey_isPaidUser1") as? NSObject) ?? NSObject()
                 }
@@ -122,14 +122,14 @@ final class AccessTests: XCTestCase {
         assertMacroExpansion(
             """
             @Access<NSObject>(.nsMapTable(cache))
-            var isPaidUser1 = NSObject()
+            var isPaidUser1: NSObject = NSObject()
             @Access<NSObject?>(.nsMapTable(cache))
             var isPaidUser2: NSObject?
             """,
             expandedSource:
             """
 
-            var isPaidUser1 = NSObject() {
+            var isPaidUser1: NSObject {
                 get {
                     (cache.object(forKey: "AccessKey_isPaidUser1") as? NSObject) ?? NSObject()
                 }
